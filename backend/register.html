@@ -1,20 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — AzUAC Campus Events</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+  :root {
+    --navy:#080f1e; --navy-2:#0e1a35; --gold:#c9a84c; --gold-2:#e8c97a;
+    --gold-glow:rgba(201,168,76,.2); --muted:rgba(255,255,255,.45);
+    --border:rgba(255,255,255,.08); --border-g:rgba(201,168,76,.28);
+    --font-d:'Cormorant Garamond',serif; --font-b:'Outfit',sans-serif;
+    --expo:cubic-bezier(.16,1,.3,1);
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font-b);background:var(--navy);color:#fff;min-height:100vh;overflow-x:hidden;cursor:none;}
+
+  #cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;mix-blend-mode:difference;}
+  #cur2{position:fixed;width:34px;height:34px;border:1.5px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s var(--expo),top .1s var(--expo),width .25s,height .25s;opacity:.5;}
+  #ov{position:fixed;inset:0;background:var(--navy);z-index:8000;transform:scaleY(1);transform-origin:top;pointer-events:none;}
+  #pc{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;}
+
+  .page{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;z-index:1;}
+
+  /* FORM PANEL (left) */
+  .fp{
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:60px 56px;
+    background:rgba(8,15,30,.4);
+    position:relative;
+    border-right:1px solid var(--border-g);
+  }
+  .fp::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse 60% 60% at 20% 80%,rgba(201,168,76,.05),transparent);
+    pointer-events:none;
+  }
+  .form-box{width:100%;max-width:400px;position:relative;z-index:2;}
+
+  .form-logo{display:flex;align-items:center;gap:12px;margin-bottom:38px;animation:fu .8s var(--expo) .15s both;}
+  .form-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--gold),var(--gold-2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:700;font-size:13px;color:var(--navy);text-align:center;line-height:1.1;flex-shrink:0;}
+  .form-logo-t p:first-child{font-size:12px;font-weight:600;color:#fff;}
+  .form-logo-t p:last-child{font-size:11px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;}
+
+  .form-title{font-family:var(--font-d);font-size:36px;font-weight:600;margin-bottom:6px;animation:fu .8s var(--expo) .2s both;}
+  .form-sub{font-size:14px;color:var(--muted);margin-bottom:34px;animation:fu .8s var(--expo) .25s both;}
+
+  .iw{position:relative;margin-bottom:20px;}
+  .iw:nth-child(1){animation:fu .8s var(--expo) .3s both;}
+  .iw:nth-child(2){animation:fu .8s var(--expo) .37s both;}
+  .iw label{display:block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;transition:color .2s;}
+  .iw:focus-within label{color:var(--gold);}
+
+  .iw input{
+    width:100%;padding:14px 50px 14px 18px;
+    background:rgba(255,255,255,.04);
+    border:1.5px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    font-family:var(--font-b);font-size:15px;color:#fff;
+    outline:none;transition:all .3s var(--expo);
+  }
+  .iw input::placeholder{color:rgba(255,255,255,.22);}
+  .iw input:focus{border-color:var(--gold);background:rgba(201,168,76,.06);box-shadow:0 0 0 4px rgba(201,168,76,.1);}
+
+  /* Password strength bar */
+  .pw-bar{height:3px;border-radius:3px;margin-top:8px;background:rgba(255,255,255,.07);overflow:hidden;}
+  .pw-bar-fill{height:100%;width:0%;border-radius:3px;transition:width .4s var(--expo),background .4s;}
+
+  .iw .ic{position:absolute;right:16px;bottom:15px;font-size:18px;color:rgba(255,255,255,.22);transition:color .2s;pointer-events:all;cursor:none;}
+  .iw:focus-within .ic{color:var(--gold);}
+  .hint{font-size:11px;color:rgba(255,255,255,.25);margin-top:6px;}
+  .ferr{font-size:12px;color:#f87171;margin-top:6px;display:flex;align-items:center;gap:5px;}
+
+  .btn-sub{
+    width:100%;padding:14px;margin-top:8px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:var(--navy);border:none;border-radius:12px;
+    font-family:var(--font-b);font-size:15px;font-weight:700;
+    cursor:none;transition:all .3s var(--expo);
+    position:relative;overflow:hidden;
+    animation:fu .8s var(--expo) .44s both;
+    box-shadow:0 4px 20px var(--gold-glow);
+  }
+  .btn-sub::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.15);transform:translateX(-110%) skewX(-15deg);transition:transform .45s var(--expo);}
+  .btn-sub:hover::before{transform:translateX(110%) skewX(-15deg);}
+  .btn-sub:hover{transform:translateY(-3px);box-shadow:0 12px 36px var(--gold-glow);}
+
+  .form-foot{text-align:center;font-size:14px;color:rgba(255,255,255,.35);margin-top:22px;animation:fu .8s var(--expo) .5s both;}
+  .form-foot a{color:var(--gold);text-decoration:none;font-weight:600;transition:color .2s;}
+  .form-foot a:hover{color:var(--gold-2);}
+
+  /* Terms checkbox */
+  .terms{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);margin-bottom:18px;animation:fu .8s var(--expo) .41s both;}
+  .terms input[type="checkbox"]{width:16px;height:16px;margin-top:2px;accent-color:var(--gold);cursor:none;flex-shrink:0;}
+  .terms a{color:var(--gold);text-decoration:none;}
+
+  @keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+  /* VISUAL PANEL (right) */
+  .vp{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#080f1e,#0e1a35,#080f1e);
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:52px;
+  }
+
+  .vp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);background-size:50px 50px;mask-image:radial-gradient(ellipse 80% 80% at 70% 50%,#000,transparent);pointer-events:none;}
+  .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+  .o1{width:420px;height:420px;background:radial-gradient(circle,rgba(201,168,76,.14),transparent 70%);top:-80px;right:-100px;animation:orbF 11s ease-in-out infinite;}
+  .o2{width:300px;height:300px;background:radial-gradient(circle,rgba(96,165,250,.07),transparent 70%);bottom:-60px;left:-60px;animation:orbF 8s ease-in-out -3s infinite;}
+  @keyframes orbF{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,14px)}}
+
+  .vp-logo{position:relative;z-index:2;display:flex;align-items:center;gap:14px;text-decoration:none;}
+  .logo-m{width:52px;height:52px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:700;font-size:16px;color:var(--navy);text-align:center;line-height:1.1;flex-shrink:0;box-shadow:0 8px 28px var(--gold-glow);}
+  .logo-tt h1{font-family:var(--font-d);font-size:13px;font-weight:600;line-height:1.25;}
+  .logo-tt span{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);}
+
+  .vp-mid{position:relative;z-index:2;}
+  .vp-mid h2{font-family:var(--font-d);font-size:clamp(36px,4.5vw,58px);font-weight:600;line-height:1.1;}
+  .vp-mid h2 em{font-style:italic;color:var(--gold);}
+  .vp-mid p{margin-top:18px;font-size:15px;color:var(--muted);line-height:1.7;max-width:340px;}
+
+  /* Category cards */
+  .cats{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .cat{
+    padding:18px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;
+    transition:all .35s var(--expo);
+    cursor:none;
+  }
+  .cat:hover{background:rgba(201,168,76,.07);border-color:var(--border-g);transform:translateY(-4px);}
+  .cat .ico{font-size:28px;margin-bottom:10px;}
+  .cat h4{font-family:var(--font-d);font-size:15px;font-weight:600;margin-bottom:4px;}
+  .cat p{font-size:11px;color:rgba(255,255,255,.38);}
+
+  /* Big rotating visual */
+  .vp-visual{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    pointer-events:none;z-index:0;
+  }
+  .ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,.1);animation:spin 30s linear infinite;top:50%;left:50%;transform:translate(-50%,-50%);}
+  .ring-1{width:400px;height:400px;}
+  .ring-2{width:280px;height:280px;border-color:rgba(201,168,76,.07);animation-direction:reverse;animation-duration:20s;}
+  .ring-3{width:550px;height:550px;border-color:rgba(201,168,76,.05);animation-duration:48s;}
+  @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+
+  @media(max-width:768px){
+    .page{grid-template-columns:1fr;}
+    .vp{display:none;}
+    .fp{padding:40px 22px;border-right:none;}
+  }
+  </style>
 </head>
 <body>
-    <h1>Register Page</h1>
+<div id="cur"></div>
+<div id="cur2"></div>
+<div id="ov"></div>
+<canvas id="pc"></canvas>
 
-    <form method="post" action="">
-        {{form.hidden_tag() }}
-        {{form.username }}
-        {{form.password }}
-        {{form.submit }}
-    </form>
+<div class="page">
+  <!-- ══ LEFT FORM ══ -->
+  <div class="fp">
+    <div class="form-box">
+      <div class="form-logo">
+        <div class="form-logo-icon">AZ<br>UAC</div>
+        <div class="form-logo-t">
+          <p>AzUAC Campus Events</p>
+          <p>Student Portal</p>
+        </div>
+      </div>
 
-    <a href="{{url_for('login')}}">Already you have acount</a>
+      <h2 class="form-title">Create Account</h2>
+      <p class="form-sub">Join the AzUAC campus events community today</p>
+
+      <form method="POST" action="/register" id="reg-form">
+        {{ form.hidden_tag() if form }}
+
+        <div class="iw">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Choose a username" minlength="4" maxlength="20" autocomplete="username" required>
+          <span class="ic">👤</span>
+          <div class="hint">Between 4–20 characters</div>
+          {% if form and form.username.errors %}
+            {% for e in form.username.errors %}<div class="ferr">⚠ {{ e }}</div>{% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="iw">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Create a strong password" minlength="8" maxlength="20" autocomplete="new-password" required>
+          <span class="ic" id="pw-eye">🔒</span>
+          <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill"></div></div>
+          <div class="hint" id="pw-hint">Between 8–20 characters</div>
+          {% if form and form.password.errors %}
+            {% for e in form.password.errors %}<div class="ferr">⚠ {{ e }}</div>{% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="terms">
+          <input type="checkbox" id="agree" required>
+          <label for="agree">I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a> of AzUAC Campus Events.</label>
+        </div>
+
+        <button type="submit" class="btn-sub" id="sub-btn">
+          Create My Account →
+        </button>
+      </form>
+
+      <div class="form-foot">
+        Already have an account? <a href="/login">Sign in here</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT VISUAL ══ -->
+  <div class="vp">
+    <div class="vp-grid"></div>
+    <div class="vp-visual">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+    </div>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+
+    <a href="/" class="vp-logo">
+      <div class="logo-m">AZ<br>UAC</div>
+      <div class="logo-tt">
+        <h1>Azerbaijan University of Architecture & Construction</h1>
+        <span>Campus Events Portal</span>
+      </div>
+    </a>
+
+    <div class="vp-mid">
+      <h2>Join the<br><em>AzUAC</em><br>Community</h2>
+      <p>Register to unlock full access to all campus events, workshops, and academic competitions at Azerbaijan's premier architecture university.</p>
+    </div>
+
+    <div class="cats">
+      <div class="cat"><div class="ico">🏛️</div><h4>Architecture</h4><p>Design events & symposiums</p></div>
+      <div class="cat"><div class="ico">⚙️</div><h4>Engineering</h4><p>Tech workshops & expos</p></div>
+      <div class="cat"><div class="ico">🌍</div><h4>Cultural</h4><p>International exhibitions</p></div>
+      <div class="cat"><div class="ico">🏆</div><h4>Competitions</h4><p>Academic competitions</p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+let cx=-100,cy=-100,fx=-100,fy=-100;
+document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;cur.style.left=cx+'px';cur.style.top=cy+'px';});
+(function a(){fx+=(cx-fx)*.14;fy+=(cy-fy)*.14;cur2.style.left=fx+'px';cur2.style.top=fy+'px';requestAnimationFrame(a);})();
+document.querySelectorAll('a,button,input').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';cur2.style.width=cur2.style.height='52px';cur2.style.opacity='.22';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';cur2.style.width=cur2.style.height='34px';cur2.style.opacity='.5';});
+});
+
+/* PARTICLES */
+const cv=document.getElementById('pc'),ct=cv.getContext('2d');
+let W,H,pts=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+resize();addEventListener('resize',resize);
+class P{constructor(){this.reset();}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.25;this.vy=(Math.random()-.5)*.25;this.r=Math.random()*1.5+.3;this.a=Math.random()*.4+.08;this.c=Math.random()>.55?`rgba(201,168,76,${this.a})`:`rgba(255,255,255,${this.a*.4})`;}step(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}draw(){ct.beginPath();ct.arc(this.x,this.y,this.r,0,Math.PI*2);ct.fillStyle=this.c;ct.fill();}}
+for(let i=0;i<90;i++)pts.push(new P());
+(function l(){ct.clearRect(0,0,W,H);pts.forEach(p=>{p.step();p.draw();});requestAnimationFrame(l);})();
+
+/* PAGE TRANSITION */
+const ov=document.getElementById('ov');
+ov.style.transition='transform .7s cubic-bezier(.76,0,.24,1)';
+ov.style.transform='scaleY(0)';
+document.querySelectorAll('a').forEach(a=>{
+  const h=a.getAttribute('href');
+  if(!h||h.startsWith('#')||h.startsWith('http'))return;
+  a.addEventListener('click',e=>{e.preventDefault();ov.style.transformOrigin='bottom';ov.style.transform='scaleY(1)';setTimeout(()=>{window.location.href=h;},560);});
+});
+
+/* PASSWORD STRENGTH */
+const pwInp=document.getElementById('password');
+const fill=document.getElementById('pw-fill');
+const hint=document.getElementById('pw-hint');
+const labels=[
+  {w:'0%',  b:'rgba(255,255,255,.1)', t:'Between 8–20 characters'},
+  {w:'25%', b:'#f87171', t:'Too weak — add numbers or symbols'},
+  {w:'55%', b:'#fbbf24', t:'Getting stronger…'},
+  {w:'80%', b:'#34d399', t:'Strong password!'},
+  {w:'100%',b:'#22d3ee', t:'Very strong password 🔒'},
+];
+pwInp.addEventListener('input',()=>{
+  const v=pwInp.value, l=v.length;
+  let s=0;
+  if(l>=8)s++;
+  if(/[A-Z]/.test(v))s++;
+  if(/[0-9]/.test(v))s++;
+  if(/[^A-Za-z0-9]/.test(v))s++;
+  const lv=l<1?0:Math.min(s,4);
+  fill.style.width=labels[lv].w;
+  fill.style.background=labels[lv].b;
+  hint.textContent=labels[lv].t;
+  hint.style.color=labels[lv].b;
+});
+
+/* PASSWORD TOGGLE */
+const pwEye=document.getElementById('pw-eye');
+pwEye.addEventListener('click',()=>{
+  if(pwInp.type==='password'){pwInp.type='text';pwEye.textContent='🔓';}
+  else{pwInp.type='password';pwEye.textContent='🔒';}
+});
+
+/* FORM SUBMIT */
+document.getElementById('reg-form').addEventListener('submit',()=>{
+  const btn=document.getElementById('sub-btn');
+  btn.textContent='Creating account…';btn.disabled=true;btn.style.opacity='.8';
+});
+
+/* SHAKE ON INVALID */
+document.querySelectorAll('input').forEach(inp=>{
+  inp.addEventListener('invalid',e=>{
+    e.preventDefault();
+    inp.parentElement.style.animation='shake .35s ease';
+    setTimeout(()=>inp.parentElement.style.animation='',350);
+  });
+});
+const s=document.createElement('style');
+s.textContent='@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}';
+document.head.appendChild(s);
+</script>
 </body>
 </html>

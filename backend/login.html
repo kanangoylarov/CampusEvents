@@ -1,11 +1,333 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <h1> </h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Login — AzUAC Campus Events{% endblock %}
+
+{% block extra_styles %}
+.auth-page {
+    min-height: calc(100vh - 86px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* LEFT PANEL */
+.auth-visual {
+    background: 
+        radial-gradient(ellipse at 30% 70%, rgba(201,168,76,0.18) 0%, transparent 60%),
+        linear-gradient(135deg, #0a1628 0%, #162040 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid rgba(201,168,76,0.2);
+}
+
+.auth-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(201,168,76,0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.uni-logo-large {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    background: var(--gold);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 32px;
+    box-shadow: 0 8px 32px rgba(201,168,76,0.35);
+}
+
+.auth-visual h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--white);
+    position: relative;
+}
+
+.auth-visual h2 em { color: var(--gold); font-style: italic; }
+
+.auth-visual p {
+    margin-top: 16px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    font-size: 15px;
+    position: relative;
+}
+
+.auth-features {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+}
+
+.feature-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* RIGHT PANEL */
+.auth-form-panel {
+    background: #f8f6f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 48px;
+}
+
+.auth-form-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+}
+
+.form-logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--navy);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+.form-logo-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+}
+
+.form-logo-text span {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.auth-form-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+
+.auth-form-box > p {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 32px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #d1c9b8;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    background: white;
+    color: var(--navy);
+    transition: all 0.2s;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(13,27,62,0.08);
+}
+
+.form-group input::placeholder { color: #b0a898; }
+
+.btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+}
+
+.btn-submit:hover {
+    background: #162040;
+    box-shadow: 0 4px 16px rgba(13,27,62,0.3);
+}
+
+.form-divider {
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.form-divider::before, .form-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #d1c9b8;
+}
+.form-divider::before { left: 0; }
+.form-divider::after { right: 0; }
+
+.form-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--gray);
+    margin-top: 20px;
+}
+
+.form-link a {
+    color: var(--navy);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--navy);
+}
+
+.error-msg {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #991b1b;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .auth-page { grid-template-columns: 1fr; }
+    .auth-visual { display: none; }
+    .auth-form-panel { padding: 40px 24px; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <!-- LEFT VISUAL -->
+    <div class="auth-visual">
+        <div class="uni-logo-large">AZ<br>UAC</div>
+        <h2>Welcome Back to<br><em>Campus Events</em></h2>
+        <p>Sign in to access all upcoming events, manage your registrations, and stay connected with campus life.</p>
+        <div class="auth-features">
+            <div class="feature-item">
+                <div class="feature-icon">📅</div>
+                Browse & register for events
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔔</div>
+                Get event reminders
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🎓</div>
+                Track your participation
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="auth-form-panel">
+        <div class="auth-form-box">
+            <div class="form-logo">
+                <div class="form-logo-icon">AZ<br>UAC</div>
+                <div class="form-logo-text">
+                    <h3>Azerbaijan University of<br>Architecture & Construction</h3>
+                    <span>Campus Events Portal</span>
+                </div>
+            </div>
+
+            <h2>Sign In</h2>
+            <p>Enter your student credentials to continue</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="error-msg">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="/login">
+                {{ form.hidden_tag() if form else '' }}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-submit">Sign In to My Account</button>
+            </form>
+
+            <div class="form-link">
+                Don't have an account? <a href="/register">Register here</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
