@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Event</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Create New Event</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('event.create_event') }}" method="POST">
+            
+            <label>Event Name:</label>
+            <input type="text" name="name" required placeholder="Annual Gala">
+
+            <label>Description:</label>
+            <textarea name="description" placeholder="Describe your event..."></textarea>
+
+            <label>Picture URL:</label>
+            <input type="text" name="picture" placeholder="http://image.url/photo.jpg">
+
+            <label>Event Date:</label>
+            <input type="date" name="date" required>
+
+            <div class="time-group">
+                <div>
+                    <label>Start Time:</label>
+                    <input type="time" name="start_time" required>
+                </div>
+                <div>
+                    <label>End Time:</label>
+                    <input type="time" name="end_time" required>
+                </div>
+            </div>
+
+            <label>Room ID:</label>
+            <input type="number" name="room_id" placeholder="e.g. 101">
+
+            <label>Capacity:</label>
+            <input type="number" name="capacity" placeholder="e.g. 50">
+
+            <label>Organization ID:</label>
+            <input type="number" name="organization_id">
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="private" id="private">
+                <label for="private">Make this event private?</label>
+            </div>
+
+            <button type="submit" class="btn-submit">Create Event</button>
+        </form>
+        
+        <p><a href="{{ url_for('event.list_events') }}">Back to All Events</a></p>
+    </div>
+
+</body>
+</html>
