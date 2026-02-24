@@ -6,42 +6,46 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div class="container-wide"> <header class="list-header">
             <h2>Campus Organizations</h2>
             <a href="{{ url_for('organization.create_organization') }}" class="btn-new">+ Register New</a>
         </header>
 
         {% if organizations %}
-            <div class="org-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+            <div class="org-grid">
                 {% for org in organizations %}
-                    <div class="org-card" style="border: 1px solid #eee; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden; background: white;">
-                        <div class="org-banner" style="height: 100px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                    <div class="org-card">
+                        <div class="org-banner">
                             {% if org.picture %}
-                                <img src="{{ org.picture }}" alt="{{ org.name }}" style="height: 80px; width: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white;">
+                                <img src="{{ org.picture }}" alt="{{ org.name }}" class="org-logo">
                             {% else %}
-                                <div style="font-size: 40px;">🏢</div>
+                                <div class="org-icon">🏢</div>
                             {% endif %}
                         </div>
                         
-                        <div style="padding: 15px; text-align: center;">
-                            <h3 style="margin-top: 0;">{{ org.name }}</h3>
-                            <p style="color: #666; font-size: 0.9em;">{{ org.description }}</p>
-                            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
-                            <small>Member of CampusEvents since {{ org.created_at.year }}</small>
+                        <div class="org-content">
+                            <h3>{{ org.name }}</h3>
+                            <p class="org-desc">{{ org.description[:120] }}...</p>
+                            
+                            <div class="org-stats">
+                                <strong>{{ org.events|length }}</strong> active events
+                            </div>
+                            
+                            <hr>
+                            <small>Partner since {{ org.created_at.strftime('%B %Y') }}</small>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div style="text-align: center; padding: 50px;">
+            <div class="empty-state">
                 <p>No organizations found.</p>
-                <a href="{{ url_for('organization.create_organization') }}">Create the first one!</a>
+                <a href="{{ url_for('organization.create_organization') }}" class="btn-submit">Create the first one!</a>
             </div>
         {% endif %}
 
-        <nav style="margin-top: 30px;">
-            <a href="{{ url_for('event.list_events') }}">Events</a> | 
+        <nav class="footer-nav">
+            <a href="{{ url_for('event.list_events') }}">Events</a>
             <a href="{{ url_for('room.list_rooms') }}">Rooms</a>
         </nav>
     </div>

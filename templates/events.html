@@ -26,9 +26,8 @@
                         <h3>{{ event.name }}</h3>
                         <p><strong>Date:</strong> {{ event.date }}</p>
                         <p><strong>Time:</strong> {{ event.start_time }} - {{ event.end_time }}</p>
-                        <p><strong>Room:</strong> {{ event.room_id }}</p>
-                        <p>{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
-                        
+                        <p><strong>Room:</strong> {{ event.venue.room_name if event.venue else "No Room Assigned" }}</p>                        <p>{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
+                        <p><strong>By:</strong> {{ event.organizer.name if event.organizer else "Independent" }}</p>
                         <div class="badge">
                             {% if event.private %}
                                 <span class="status-private">Private</span>

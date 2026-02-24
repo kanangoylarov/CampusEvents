@@ -9,6 +9,14 @@
     <div class="container">
         <h2>Add New Campus Room</h2>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         <form action="{{ url_for('room.create_room') }}" method="POST">
             <label>Room Name/Number:</label>
             <input type="text" name="room_name" required placeholder="e.g. Conference Hall B">
@@ -17,7 +25,7 @@
             <input type="text" name="location" required placeholder="e.g. Science Building, 3rd Floor">
 
             <label>Capacity:</label>
-            <input type="number" name="capacity" required placeholder="e.g. 100">
+            <input type="number" name="capacity" required min="1" placeholder="e.g. 100">
 
             <label>Room Image URL:</label>
             <input type="text" name="picture" placeholder="http://url-to-image.jpg">
@@ -25,7 +33,9 @@
             <button type="submit" class="btn-submit">Save Room</button>
         </form>
         
-        <p><a href="{{ url_for('room.list_rooms') }}">View All Rooms</a></p>
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="{{ url_for('room.list_rooms') }}">← View All Rooms</a>
+        </div>
     </div>
 </body>
 </html>

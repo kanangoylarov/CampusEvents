@@ -47,7 +47,7 @@ class Organization(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    events = db.relationship('Event', backref='organizer', lazy=True,nullable=False)
+    events = db.relationship('Event', backref='organizer', lazy=True)
 
 
 class Room(db.Model):
@@ -60,4 +60,4 @@ class Room(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    event = db.relationship('Event', backref='venue', uselist=False,nullable=False,lazy=True)
+    event = db.relationship('Event', backref='venue', uselist=False,lazy=True)

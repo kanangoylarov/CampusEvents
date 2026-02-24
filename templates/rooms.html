@@ -6,34 +6,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <header style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="container-wide">
+        <header class="list-header">
             <h2>Available Rooms</h2>
             <a href="{{ url_for('room.create_room') }}" class="btn-new">+ Add Room</a>
         </header>
 
         {% if rooms %}
-            <div class="rooms-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+            <div class="rooms-grid">
                 {% for room in rooms %}
-                    <div class="room-card" style="border: 1px solid #ddd; padding: 15px; border-radius: 10px;">
+                    <div class="room-card">
                         {% if room.picture %}
-                            <img src="{{ room.picture }}" alt="{{ room.room_name }}" style="width:100%; height: 150px; object-fit: cover; border-radius: 5px;">
+                            <img src="{{ room.picture }}" alt="{{ room.room_name }}" class="room-img">
+                        {% else %}
+                            <div class="room-placeholder">🏢</div>
                         {% endif %}
                         
-                        <h3>{{ room.room_name }}</h3>
-                        <p><strong>Location:</strong> {{ room.location }}</p>
-                        <p><strong>Max Capacity:</strong> <span class="badge">{{ room.capacity }} people</span></p>
-                        
-                        <small>Created: {{ room.created_at.strftime('%Y-%m-%d') }}</small>
+                        <div class="room-content">
+                            <h3>{{ room.room_name }}</h3>
+                            <p><strong>Location:</strong> {{ room.location }}</p>
+                            <p><strong>Capacity:</strong> {{ room.capacity }} people</p>
+                            
+                            <div class="room-status">
+                                {% if room.event %}
+                                    <span class="status-occupied">Booked: {{ room.event.name }}</span>
+                                {% else %}
+                                    <span class="status-available">Available</span>
+                                {% endif %}
+                            </div>
+
+                            <hr>
+                            <small>ID: #{{ room.id }} | Added: {{ room.created_at.strftime('%Y-%m-%d') }}</small>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p>No rooms added yet. <a href="{{ url_for('room.create_room') }}">Add the first one!</a></p>
+            <div class="empty-state">
+                <p>No rooms added yet.</p>
+                <a href="{{ url_for('room.create_room') }}" class="btn-submit">Add the first one!</a>
+            </div>
         {% endif %}
         
-        <hr>
-        <a href="{{ url_for('event.list_events') }}">Go to Events Dashboard</a>
+        <div class="footer-nav">
+            <a href="{{ url_for('event.list_events') }}">Events Dashboard</a> | 
+            <a href="{{ url_for('organization.list_organizations') }}">Organizations</a>
+        </div>
     </div>
 </body>
 </html>
