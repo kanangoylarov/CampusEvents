@@ -31,21 +31,24 @@ class Event(db.Model):
     end_time = db.Column(db.Time)
     room_id = db.Column(db.Integer)
     capacity = db.Column(db.Integer)
+
+    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-def new_func(db):
-    class Organization(db.Model):
-        __tablename__ = 'organizations'
-        id = db.Column(db.Integer, primary_key=True)
-        picture = db.Column(db.String(200))
-        name = db.Column(db.String(100), nullable=False)
-        events_id = db.Column(db.String(200))
-        description = db.Column(db.Text)
-        created_at = db.Column(db.DateTime, default=datetime.utcnow)
-        updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+class Organization(db.Model):
+    __tablename__ = 'organizations'
+    id = db.Column(db.Integer, primary_key=True)
+    picture = db.Column(db.String(200))
+    name = db.Column(db.String(100), nullable=False)
+    events_id = db.Column(db.String(200))
+    description = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-new_func(db)
+    events = db.relationship('Event', backref='organizer', lazy=True)
+
 
 class Room(db.Model):
     __tablename__ = 'rooms'
@@ -57,3 +60,4 @@ class Room(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
+    event = db.relationship('Event', backref='venue', uselist=False)
