@@ -34,23 +34,26 @@ class Event(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-# class Organization(db.Model):
-#     __tablename__ = 'organizations'
-#     id = db.Column(db.Integer, primary_key=True)
-#     picture = db.Column(db.String(200))
-#     name = db.Column(db.String(100), nullable=False)
-#     events_id = db.Column(db.String(200))
-#     description = db.Column(db.Text)
-#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-#     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+def new_func(db):
+    class Organization(db.Model):
+        __tablename__ = 'organizations'
+        id = db.Column(db.Integer, primary_key=True)
+        picture = db.Column(db.String(200))
+        name = db.Column(db.String(100), nullable=False)
+        events_id = db.Column(db.String(200))
+        description = db.Column(db.Text)
+        created_at = db.Column(db.DateTime, default=datetime.utcnow)
+        updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-# class Room(db.Model):
-#     __tablename__ = 'rooms'
-#     id = db.Column(db.Integer, primary_key=True)
-#     picture = db.Column(db.String(200))
-#     room_name = db.Column(db.String(100), nullable=False)
-#     capacity = db.Column(db.Integer)
-#     location = db.Column(db.String(200))
-#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-#     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+new_func(db)
+
+class Room(db.Model):
+    __tablename__ = 'rooms'
+    id = db.Column(db.Integer, primary_key=True)
+    picture = db.Column(db.String(200))
+    room_name = db.Column(db.String(100), nullable=False)
+    capacity = db.Column(db.Integer)
+    location = db.Column(db.String(200))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
