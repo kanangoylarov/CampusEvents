@@ -17,6 +17,7 @@
     {% if rooms %}
     <div class="rooms-grid">
         {% for room in rooms %}
+        {% set booked = room.events|length > 0 %}
         <div class="room-card">
             <div class="room-image-wrap">
                 {% if room.picture %}
@@ -24,8 +25,8 @@
                 {% else %}
                     <div class="room-image-placeholder">&#128205;</div>
                 {% endif %}
-                <span class="room-status-badge {% if room.event %}status-booked{% else %}status-available{% endif %}">
-                    {% if room.event %}Booked{% else %}Available{% endif %}
+                <span class="room-status-badge {% if booked %}status-booked{% else %}status-available{% endif %}">
+                    {% if booked %}Booked{% else %}Available{% endif %}
                 </span>
             </div>
             <div class="room-body">
@@ -39,13 +40,27 @@
                         <span class="meta-icon">&#128101;</span>
                         <span>{{ room.capacity or '—' }} capacity</span>
                     </div>
-                    {% if room.event %}
-                    <div class="meta-item booked-event">
-                        <span class="meta-icon">&#128197;</span>
-                        <span>{{ room.event.name }}</span>
-                    </div>
-                    {% endif %}
                 </div>
+
+                {% if room.events %}
+                <div class="room-bookings">
+                    <p class="bookings-label">Upcoming bookings</p>
+                    {% for ev in room.events | sort(attribute='date') %}
+                    <div class="booking-slot">
+                        <div class="booking-event-name">&#128197; {{ ev.name }}</div>
+                        <div class="booking-time">
+                            {{ ev.date.strftime('%b %d, %Y') if ev.date else 'TBD' }}
+                            {% if ev.start_time %}
+                                &nbsp;&#9679;&nbsp;
+                                {{ ev.start_time.strftime('%H:%M') }}
+                                {% if ev.end_time %}&ndash;{{ ev.end_time.strftime('%H:%M') }}{% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <div class="room-footer">
                     <span class="room-id">Room #{{ room.id }}</span>
                     <span class="room-added">Added {{ room.created_at.strftime('%b %d, %Y') }}</span>

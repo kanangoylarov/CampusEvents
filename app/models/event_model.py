@@ -18,7 +18,7 @@ class Event(db.Model):
 
     # Foreign keys (each defined once, cleanly)
     organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
-    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'), unique=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
