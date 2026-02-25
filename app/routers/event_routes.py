@@ -6,7 +6,7 @@ from app.repositories import organization_repository, room_repository, event_rep
 event_bp = Blueprint('event', __name__)
 
 
-@event_bp.route('/events')
+@event_bp.get('/events')
 def list_events():
     raw_filters = {
         'org_id': request.args.get('org_id', ''),
@@ -27,14 +27,14 @@ def list_events():
     )
 
 
-@event_bp.route('/events/create')
+@event_bp.get('/events/create')
 def create_event_form():
     organizations = organization_repository.get_all_ordered_by_name()
     rooms = room_repository.get_all_ordered_by_name()
     return render_template('events/create.html', organizations=organizations, rooms=rooms)
 
 
-@event_bp.route('/events/create', methods=['POST'])
+@event_bp.post('/events/create')
 def create_event():
     event, error = event_service.create_event(request.form, request.files.get('picture'))
     if error:
@@ -47,7 +47,7 @@ def create_event():
     return redirect(url_for('event.list_events'))
 
 
-@event_bp.route('/events/<int:id>/edit')
+@event_bp.get('/events/<int:id>/edit')
 def update_event_form(id):
     event = event_repository.get_by_id(id)
     organizations = organization_repository.get_all_ordered_by_name()
@@ -56,7 +56,7 @@ def update_event_form(id):
                            organizations=organizations, rooms=rooms)
 
 
-@event_bp.route('/events/<int:id>/edit', methods=['POST'])
+@event_bp.post('/events/<int:id>/edit')
 def update_event(id):
     event, error = event_service.update_event(id, request.form, request.files.get('picture'))
     if error:
@@ -69,7 +69,7 @@ def update_event(id):
     return redirect(url_for('event.list_events'))
 
 
-@event_bp.route('/events/<int:id>/delete', methods=['POST'])
+@event_bp.post('/events/<int:id>/delete')
 def delete_event(id):
     event_service.delete_event(id)
     flash('Event deleted successfully!', 'success')

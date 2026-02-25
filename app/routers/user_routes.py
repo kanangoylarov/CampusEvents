@@ -6,12 +6,12 @@ from app.services import user_service
 user_bp = Blueprint('user', __name__)
 
 
-@user_bp.route('/register')
+@user_bp.get('/register')
 def register_form():
     return render_template('user/register.html')
 
 
-@user_bp.route('/register', methods=['POST'])
+@user_bp.post('/register')
 def register():
     user, error = user_service.register_user(
         full_name=request.form.get('full_name'),
@@ -26,12 +26,12 @@ def register():
     return redirect(url_for('user.login_form'))
 
 
-@user_bp.route('/login')
+@user_bp.get('/login')
 def login_form():
     return render_template('user/login.html')
 
 
-@user_bp.route('/login', methods=['POST'])
+@user_bp.post('/login')
 def login():
     user = user_service.authenticate(
         email=request.form.get('email'),
@@ -45,7 +45,7 @@ def login():
     return redirect(url_for('user.login_form'))
 
 
-@user_bp.route('/logout')
+@user_bp.get('/logout')
 @login_required
 def logout():
     logout_user()
