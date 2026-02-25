@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Rooms — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='rooms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Campus Rooms</h1>
+            <p class="page-subtitle">{{ rooms|length }} room{{ 's' if rooms|length != 1 }}</p>
+        </div>
+        <a href="{{ url_for('room.create_room_form') }}" class="btn-primary">+ Add Room</a>
+    </div>
+
+    {% if rooms %}
+    <div class="rooms-grid">
+        {% for room in rooms %}
+        {% set booked = room.events|length > 0 %}
+        <div class="room-card">
+            <div class="room-image-wrap">
+                {% if room.picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + room.picture) }}" alt="{{ room.room_name }}" class="room-image">
+                {% else %}
+                    <div class="room-image-placeholder">&#128205;</div>
+                {% endif %}
+                <span class="room-status-badge {% if booked %}status-booked{% else %}status-available{% endif %}">
+                    {% if booked %}Booked{% else %}Available{% endif %}
+                </span>
+            </div>
+            <div class="room-body">
+                <h3 class="room-name">{{ room.room_name }}</h3>
+                <div class="room-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128205;</span>
+                        <span>{{ room.location or 'Location not specified' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128101;</span>
+                        <span>{{ room.capacity or '—' }} capacity</span>
+                    </div>
+                </div>
+
+                {% if room.events %}
+                <div class="room-bookings">
+                    <p class="bookings-label">Upcoming bookings</p>
+                    {% for ev in room.events | sort(attribute='date') %}
+                    <div class="booking-slot">
+                        <div class="booking-event-name">&#128197; {{ ev.name }}</div>
+                        <div class="booking-time">
+                            {{ ev.date.strftime('%b %d, %Y') if ev.date else 'TBD' }}
+                            {% if ev.start_time %}
+                                &nbsp;&#9679;&nbsp;
+                                {{ ev.start_time.strftime('%H:%M') }}
+                                {% if ev.end_time %}&ndash;{{ ev.end_time.strftime('%H:%M') }}{% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="card-actions">
+                    <a href="{{ url_for('room.update_room_form', id=room.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <form action="{{ url_for('room.delete_room', id=room.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+                <div class="room-footer">
+                    <span class="room-id">Room #{{ room.id }}</span>
+                    <span class="room-added">Added {{ room.created_at.strftime('%b %d, %Y') }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#128205;</div>
+        <h3>No rooms added yet</h3>
+        <p>Add campus rooms to start assigning events.</p>
+        <a href="{{ url_for('room.create_room_form') }}" class="btn-primary">Add Room</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

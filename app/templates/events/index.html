@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Events — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='events.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <!-- Page header -->
+    <div class="page-header">
+        <div>
+            <h1>Campus Events</h1>
+            <p class="page-subtitle">
+                {{ events|length }} event{{ 's' if events|length != 1 }}
+                {% if active_filters %}<span class="filter-active-label">· filtered</span>{% endif %}
+            </p>
+        </div>
+        <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">+ New Event</a>
+    </div>
+
+    <!-- Filter panel -->
+    <form method="GET" action="{{ url_for('event.list_events') }}" class="filter-panel">
+        <div class="filter-grid">
+
+            <div class="filter-group">
+                <label class="filter-label">Organization</label>
+                <select name="org_id" class="filter-input">
+                    <option value="">All organizations</option>
+                    {% for org in organizations %}
+                    <option value="{{ org.id }}" {% if filters.org_id == org.id|string %}selected{% endif %}>
+                        {{ org.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Date from</label>
+                <input type="date" name="date_from" class="filter-input"
+                       value="{{ filters.date_from }}">
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Date to</label>
+                <input type="date" name="date_to" class="filter-input"
+                       value="{{ filters.date_to }}">
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Start time from</label>
+                <input type="time" name="time_from" class="filter-input"
+                       value="{{ filters.time_from }}">
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Start time to</label>
+                <input type="time" name="time_to" class="filter-input"
+                       value="{{ filters.time_to }}">
+            </div>
+
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn-filter-apply">Apply Filters</button>
+            {% if active_filters %}
+            <a href="{{ url_for('event.list_events') }}" class="btn-filter-clear">&#10005; Clear</a>
+            {% endif %}
+        </div>
+    </form>
+
+    <!-- Active filter chips -->
+    {% if active_filters %}
+    <div class="filter-chips">
+        {% if filters.org_id %}
+            {% for org in organizations %}{% if org.id|string == filters.org_id %}
+            <span class="chip">&#127970; {{ org.name }}</span>
+            {% endif %}{% endfor %}
+        {% endif %}
+        {% if filters.date_from or filters.date_to %}
+        <span class="chip">&#128197;
+            {% if filters.date_from %}from {{ filters.date_from }}{% endif %}
+            {% if filters.date_to %} to {{ filters.date_to }}{% endif %}
+        </span>
+        {% endif %}
+        {% if filters.time_from or filters.time_to %}
+        <span class="chip">&#128336;
+            {% if filters.time_from %}from {{ filters.time_from }}{% endif %}
+            {% if filters.time_to %} to {{ filters.time_to }}{% endif %}
+        </span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Events grid -->
+    {% if events %}
+    <div class="events-grid">
+        {% for event in events %}
+        <div class="event-card">
+            <div class="event-image-wrap">
+                {% if event.picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + event.picture) }}" alt="{{ event.name }}" class="event-image">
+                {% else %}
+                    <div class="event-image-placeholder">&#128197;</div>
+                {% endif %}
+                <span class="event-privacy-badge {% if event.private %}badge-private{% else %}badge-public{% endif %}">
+                    {% if event.private %}Private{% else %}Public{% endif %}
+                </span>
+            </div>
+            <div class="event-body">
+                <h3 class="event-name">{{ event.name }}</h3>
+                {% if event.description %}
+                <p class="event-desc">{{ event.description[:110] }}{% if event.description|length > 110 %}…{% endif %}</p>
+                {% endif %}
+                <div class="event-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128197;</span>
+                        <span>{{ event.date.strftime('%b %d, %Y') if event.date else 'TBD' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128336;</span>
+                        <span>
+                            {% if event.start_time %}
+                                {{ event.start_time.strftime('%H:%M') }}
+                                {% if event.end_time %} &ndash; {{ event.end_time.strftime('%H:%M') }}{% endif %}
+                            {% else %}
+                                TBD
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128205;</span>
+                        <span>{{ event.venue.room_name if event.venue else 'No room assigned' }}</span>
+                    </div>
+                    {% if event.organizer %}
+                    <div class="meta-item">
+                        <span class="meta-icon">&#127970;</span>
+                        <span>{{ event.organizer.name }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if event.capacity %}
+                <div class="event-capacity">
+                    <span class="capacity-pill">&#128101; {{ event.capacity }} seats</span>
+                </div>
+                {% endif %}
+                <div class="card-actions">
+                    <a href="{{ url_for('event.update_event_form', id=event.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <form action="{{ url_for('event.delete_event', id=event.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#128269;</div>
+        {% if active_filters %}
+        <h3>No events match your filters</h3>
+        <p>Try adjusting or clearing your filters.</p>
+        <a href="{{ url_for('event.list_events') }}" class="btn-primary">Clear Filters</a>
+        {% else %}
+        <h3>No events yet</h3>
+        <p>Be the first to create a campus event.</p>
+        <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">Create Event</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

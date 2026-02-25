@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Edit Room — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='rooms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="form-header">
+        <h1>Edit Room</h1>
+        <p>Update the details for "{{ room.room_name }}".</p>
+    </div>
+
+    <form action="{{ url_for('room.update_room', id=room.id) }}" method="POST" enctype="multipart/form-data" class="create-form">
+
+        <div class="form-section">
+            <h4 class="section-title">Room Details</h4>
+            <div class="form-group">
+                <label for="room_name">Room Name / Number <span class="required">*</span></label>
+                <input type="text" id="room_name" name="room_name" value="{{ room.room_name }}" placeholder="e.g. Conference Hall B" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location / Building <span class="required">*</span></label>
+                <input type="text" id="location" name="location" value="{{ room.location or '' }}" placeholder="e.g. Science Building, 3rd Floor" required>
+            </div>
+            <div class="form-group">
+                <label for="capacity">Capacity <span class="required">*</span></label>
+                <input type="number" id="capacity" name="capacity" min="1" value="{{ room.capacity or '' }}" placeholder="e.g. 80" required>
+            </div>
+            <div class="form-group">
+                <label>Room Image</label>
+                {% if room.picture %}
+                <p class="current-image-label">Current image:</p>
+                <div class="current-image-preview">
+                    <img src="{{ url_for('static', filename='uploads/' + room.picture) }}" alt="{{ room.room_name }}">
+                </div>
+                {% endif %}
+                <div class="file-upload-area">
+                    <input type="file" id="picture" name="picture" accept="image/*" onchange="previewImage(this, 'preview-new')">
+                    <div class="file-upload-icon">&#128247;</div>
+                    <div class="file-upload-text"><strong>Click to upload</strong> a new image</div>
+                    <div class="file-upload-hint">PNG, JPG, GIF or WebP — leave empty to keep current</div>
+                </div>
+                <div class="file-preview" id="preview-new">
+                    <img id="preview-img-new" src="" alt="Preview">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('room.list_rooms') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+    var preview = document.getElementById(previewId);
+    var img = preview.querySelector('img');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            preview.classList.add('has-image');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}

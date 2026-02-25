@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Edit Organization — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='organizations.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="form-header">
+        <h1>Edit Organization</h1>
+        <p>Update the details for "{{ org.name }}".</p>
+    </div>
+
+    <form action="{{ url_for('organization.update_organization', id=org.id) }}" method="POST" enctype="multipart/form-data" class="create-form">
+
+        <div class="form-section">
+            <h4 class="section-title">Organization Details</h4>
+            <div class="form-group">
+                <label for="name">Organization Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" value="{{ org.name }}" placeholder="e.g. Computer Science Club" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description <span class="required">*</span></label>
+                <textarea id="description" name="description" rows="5" required
+                    placeholder="What is the mission and focus of this organization?">{{ org.description or '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Logo / Banner</label>
+                {% if org.picture %}
+                <p class="current-image-label">Current image:</p>
+                <div class="current-image-preview">
+                    <img src="{{ url_for('static', filename='uploads/' + org.picture) }}" alt="{{ org.name }}">
+                </div>
+                {% endif %}
+                <div class="file-upload-area">
+                    <input type="file" id="picture" name="picture" accept="image/*" onchange="previewImage(this, 'preview-new')">
+                    <div class="file-upload-icon">&#128247;</div>
+                    <div class="file-upload-text"><strong>Click to upload</strong> a new image</div>
+                    <div class="file-upload-hint">PNG, JPG, GIF or WebP — leave empty to keep current</div>
+                </div>
+                <div class="file-preview" id="preview-new">
+                    <img id="preview-img-new" src="" alt="Preview">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('organization.list_organizations') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+    var preview = document.getElementById(previewId);
+    var img = preview.querySelector('img');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            preview.classList.add('has-image');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}

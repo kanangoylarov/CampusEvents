@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Home — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Discover What's Happening on Campus</h1>
+        <p class="hero-subtitle">Find events, explore organizations, and book rooms — all in one place.</p>
+        <div class="hero-actions">
+            <a href="{{ url_for('event.list_events') }}" class="btn-hero-primary">Browse Events</a>
+            <a href="{{ url_for('user.register_form') }}" class="btn-hero-outline">Create Account</a>
+        </div>
+    </div>
+    <div class="hero-illustration">&#127979;</div>
+</section>
+
+<section class="features">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">&#128197;</div>
+            <h3>Campus Events</h3>
+            <p>Browse public and private events hosted by campus organizations. Filter by date, time, and location.</p>
+            <a href="{{ url_for('event.list_events') }}" class="feature-link">View Events &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#127970;</div>
+            <h3>Organizations</h3>
+            <p>Discover clubs, departments, and student groups that are actively hosting events on campus.</p>
+            <a href="{{ url_for('organization.list_organizations') }}" class="feature-link">View Organizations &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128205;</div>
+            <h3>Room Booking</h3>
+            <p>Check real-time room availability. See capacity, location, and current booking status at a glance.</p>
+            <a href="{{ url_for('room.list_rooms') }}" class="feature-link">View Rooms &rarr;</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
