@@ -20,7 +20,7 @@
         <div class="org-card">
             <div class="org-banner">
                 {% if org.picture %}
-                    <img src="{{ org.picture }}" alt="{{ org.name }}" class="org-logo">
+                    <img src="{{ url_for('static', filename='uploads/' + org.picture) }}" alt="{{ org.name }}" class="org-logo">
                 {% else %}
                     <div class="org-logo-placeholder">{{ org.name[0].upper() }}</div>
                 {% endif %}

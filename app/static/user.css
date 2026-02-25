@@ -8,16 +8,17 @@
     align-items: flex-start;
     padding: 3rem 1.5rem 4rem;
     min-height: calc(100vh - 64px);
+    background: linear-gradient(180deg, var(--bg-page) 0%, var(--bg-subtle) 100%);
 }
 
 .auth-card {
     background: var(--bg-surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 2.5rem 2.25rem;
     width: 100%;
     max-width: 440px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
 }
 
 /* --- Auth header --- */
@@ -48,9 +49,9 @@
 }
 .auth-form .form-group label {
     display: block;
-    font-size: 0.825rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     margin-bottom: 0.4rem;
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -66,14 +67,18 @@
     color: var(--text-primary);
     background: var(--bg-page);
     outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    transition: all var(--transition-fast);
     appearance: none;
+}
+.auth-form .form-group input:hover,
+.auth-form .form-group select:hover {
+    border-color: var(--border-hover);
 }
 .auth-form .form-group input:focus,
 .auth-form .form-group select:focus {
     border-color: var(--border-focus);
     background: var(--bg-surface);
-    box-shadow: 0 0 0 4px rgba(79,110,247,.12);
+    box-shadow: var(--shadow-focus);
 }
 .auth-form .form-group input::placeholder {
     color: var(--text-muted);
@@ -91,14 +96,14 @@
     border: none;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all var(--transition-fast);
     margin-top: 0.5rem;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
 }
 .btn-auth:hover {
     background: var(--primary-dark);
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(79,110,247,.3);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
 }
 .btn-auth:active {
     transform: translateY(0);
@@ -108,7 +113,7 @@
 .auth-footer {
     text-align: center;
     margin-top: 1.5rem;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
 }
 .auth-footer a {
@@ -120,5 +125,5 @@
 
 /* --- Responsive --- */
 @media (max-width: 480px) {
-    .auth-card { padding: 2rem 1.5rem; border-radius: var(--radius-md); }
+    .auth-card { padding: 2rem 1.5rem; border-radius: var(--radius-lg); }
 }

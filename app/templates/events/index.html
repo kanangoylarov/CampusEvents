@@ -99,7 +99,7 @@
         <div class="event-card">
             <div class="event-image-wrap">
                 {% if event.picture %}
-                    <img src="{{ event.picture }}" alt="{{ event.name }}" class="event-image">
+                    <img src="{{ url_for('static', filename='uploads/' + event.picture) }}" alt="{{ event.name }}" class="event-image">
                 {% else %}
                     <div class="event-image-placeholder">&#128197;</div>
                 {% endif %}

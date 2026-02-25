@@ -1,11 +1,11 @@
 /* ============================================================
-   ORGANIZATIONS.CSS — Org list and create form
+   ORGANIZATIONS.CSS — Org list, detail, and create form
    ============================================================ */
 
 /* --- Org grid --- */
 .org-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
@@ -15,20 +15,20 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     overflow: hidden;
-    transition: var(--transition);
+    transition: all var(--transition);
     display: flex;
     flex-direction: column;
 }
 .org-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
     border-color: transparent;
 }
 
 /* --- Org banner --- */
 .org-banner {
     height: 120px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,8 +43,8 @@
 .org-logo-placeholder {
     font-size: 3rem;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 2px 8px rgba(0,0,0,.2);
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
     user-select: none;
 }
 
@@ -61,6 +61,12 @@
     font-weight: 700;
     color: var(--text-primary);
 }
+.org-name a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+.org-name a:hover { color: var(--primary); }
 .org-desc {
     font-size: 0.85rem;
     color: var(--text-secondary);
@@ -89,7 +95,7 @@
     line-height: 1;
 }
 .stat-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -99,7 +105,7 @@
 /* --- Footer --- */
 .org-footer { display: flex; justify-content: space-between; align-items: center; }
 .org-since {
-    font-size: 0.775rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
@@ -114,12 +120,13 @@
     width: 160px;
     height: 160px;
     border-radius: var(--radius-md);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     flex-shrink: 0;
+    box-shadow: var(--shadow-md);
 }
 .org-detail-logo {
     width: 100%;
@@ -162,15 +169,12 @@
 }
 
 @media (max-width: 768px) {
+    .org-grid { grid-template-columns: 1fr; }
     .org-detail-header {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
-    .org-detail-meta {
-        justify-content: center;
-    }
-    .org-detail-actions {
-        justify-content: center;
-    }
+    .org-detail-meta { justify-content: center; }
+    .org-detail-actions { justify-content: center; }
 }

@@ -11,7 +11,7 @@
         <p>Update the details for "{{ room.room_name }}".</p>
     </div>
 
-    <form action="{{ url_for('room.update_room', id=room.id) }}" method="POST" class="create-form">
+    <form action="{{ url_for('room.update_room', id=room.id) }}" method="POST" enctype="multipart/form-data" class="create-form">
 
         <div class="form-section">
             <h4 class="section-title">Room Details</h4>
@@ -28,8 +28,22 @@
                 <input type="number" id="capacity" name="capacity" min="1" value="{{ room.capacity or '' }}" placeholder="e.g. 80" required>
             </div>
             <div class="form-group">
-                <label for="picture">Room Image URL</label>
-                <input type="url" id="picture" name="picture" value="{{ room.picture or '' }}" placeholder="https://example.com/room.jpg">
+                <label>Room Image</label>
+                {% if room.picture %}
+                <p class="current-image-label">Current image:</p>
+                <div class="current-image-preview">
+                    <img src="{{ url_for('static', filename='uploads/' + room.picture) }}" alt="{{ room.room_name }}">
+                </div>
+                {% endif %}
+                <div class="file-upload-area">
+                    <input type="file" id="picture" name="picture" accept="image/*" onchange="previewImage(this, 'preview-new')">
+                    <div class="file-upload-icon">&#128247;</div>
+                    <div class="file-upload-text"><strong>Click to upload</strong> a new image</div>
+                    <div class="file-upload-hint">PNG, JPG, GIF or WebP — leave empty to keep current</div>
+                </div>
+                <div class="file-preview" id="preview-new">
+                    <img id="preview-img-new" src="" alt="Preview">
+                </div>
             </div>
         </div>
 
@@ -39,4 +53,19 @@
         </div>
     </form>
 </div>
+
+<script>
+function previewImage(input, previewId) {
+    var preview = document.getElementById(previewId);
+    var img = preview.querySelector('img');
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            preview.classList.add('has-image');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 {% endblock %}

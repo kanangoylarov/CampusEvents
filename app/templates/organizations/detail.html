@@ -12,7 +12,7 @@
     <div class="org-detail-header">
         <div class="org-detail-banner">
             {% if org.picture %}
-                <img src="{{ org.picture }}" alt="{{ org.name }}" class="org-detail-logo">
+                <img src="{{ url_for('static', filename='uploads/' + org.picture) }}" alt="{{ org.name }}" class="org-detail-logo">
             {% else %}
                 <div class="org-logo-placeholder">{{ org.name[0].upper() }}</div>
             {% endif %}
@@ -43,7 +43,7 @@
             <div class="event-card">
                 <div class="event-image-wrap">
                     {% if event.picture %}
-                        <img src="{{ event.picture }}" alt="{{ event.name }}" class="event-image">
+                        <img src="{{ url_for('static', filename='uploads/' + event.picture) }}" alt="{{ event.name }}" class="event-image">
                     {% else %}
                         <div class="event-image-placeholder">&#128197;</div>
                     {% endif %}

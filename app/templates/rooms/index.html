@@ -21,7 +21,7 @@
         <div class="room-card">
             <div class="room-image-wrap">
                 {% if room.picture %}
-                    <img src="{{ room.picture }}" alt="{{ room.room_name }}" class="room-image">
+                    <img src="{{ url_for('static', filename='uploads/' + room.picture) }}" alt="{{ room.room_name }}" class="room-image">
                 {% else %}
                     <div class="room-image-placeholder">&#128205;</div>
                 {% endif %}

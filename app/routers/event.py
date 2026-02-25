@@ -5,7 +5,7 @@ from app.extensions import db
 from app.models.event_model import Event
 from app.models.organization_model import Organization
 from app.models.room_model import Room
-from app.utils import cleanup_expired_events
+from app.utils import cleanup_expired_events, save_uploaded_image, delete_uploaded_image
 
 event_bp = Blueprint('event', __name__)
 
@@ -163,10 +163,13 @@ def create_event():
                 return render_template('events/create.html',
                                        organizations=organizations, rooms=rooms)
 
+        picture_file = request.files.get('picture')
+        saved_filename = save_uploaded_image(picture_file)
+
         new_event = Event(
             name=request.form.get('name'),
             description=request.form.get('description'),
-            picture=request.form.get('picture'),
+            picture=saved_filename,
             private=request.form.get('private') == 'on',
             date=event_date,
             for_registration=request.form.get('for_registration'),
@@ -215,9 +218,14 @@ def update_event(id):
                 return render_template('events/edit.html', event=event,
                                        organizations=organizations, rooms=rooms)
 
+        picture_file = request.files.get('picture')
+        saved_filename = save_uploaded_image(picture_file)
+        if saved_filename:
+            delete_uploaded_image(event.picture)
+            event.picture = saved_filename
+
         event.name = request.form.get('name')
         event.description = request.form.get('description')
-        event.picture = request.form.get('picture')
         event.private = request.form.get('private') == 'on'
         event.date = event_date
         event.for_registration = request.form.get('for_registration')
@@ -240,6 +248,7 @@ def update_event(id):
 @event_bp.route('/events/<int:id>/delete', methods=['POST'])
 def delete_event(id):
     event = db.get_or_404(Event, id)
+    delete_uploaded_image(event.picture)
     db.session.delete(event)
     db.session.commit()
     flash('Event deleted successfully!', 'success')
