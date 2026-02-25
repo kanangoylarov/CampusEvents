@@ -84,7 +84,6 @@ def _build_event_from_form(form):
 def list_events():
     cleanup_expired_events()
 
-    # Read filter params from query string
     org_id     = request.args.get('org_id', '').strip()
     date_from  = request.args.get('date_from', '').strip()
     date_to    = request.args.get('date_to', '').strip()
@@ -119,7 +118,6 @@ def list_events():
     events = query.order_by(Event.date.asc()).all()
     organizations = Organization.query.order_by(Organization.name).all()
 
-    # Track whether any filter is active for the "clear" button
     active_filters = any([org_id, date_from, date_to, time_from, time_to])
 
     return render_template(
@@ -155,8 +153,7 @@ def create_event():
                 flash(
                     f'Room "{room.room_name}" is already booked on {event_date} '
                     f'({start_str} – {end_str}) by "{blocking.name}". '
-                    f'Choose a different room or a non-overlapping time slot.',
-                    'danger'
+                    f'Choose a different room or a non-overlapping time slot.'
                 )
                 organizations = Organization.query.order_by(Organization.name).all()
                 rooms = Room.query.order_by(Room.room_name).all()
@@ -211,7 +208,6 @@ def update_event(id):
                     f'Room "{room.room_name}" is already booked on {event_date} '
                     f'({start_str} – {end_str}) by "{blocking.name}". '
                     f'Choose a different room or a non-overlapping time slot.',
-                    'danger'
                 )
                 organizations = Organization.query.order_by(Organization.name).all()
                 rooms = Room.query.order_by(Room.room_name).all()

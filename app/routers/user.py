@@ -21,7 +21,7 @@ def register():
         role = request.form.get('role', 'user')
 
         if _email_already_exists(email):
-            flash('An account with this email already exists.', 'danger')
+            flash('An account with this email already exists.')
             return redirect(url_for('user.register'))
 
         new_user = User(
@@ -51,7 +51,7 @@ def login():
             flash(f'Welcome back, {user.full_name}!', 'success')
             return redirect(url_for('main.index'))
 
-        flash('Invalid email or password.', 'danger')
+        flash('Invalid email or password.')
         return redirect(url_for('user.login'))
 
     return render_template('user/login.html')
