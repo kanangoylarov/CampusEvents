@@ -14,10 +14,10 @@ def create_app(config_name='development'):
 
     # Register blueprints
     from app.routers.main import main_bp
-    from app.routers.user import user_bp
-    from app.routers.event import event_bp
-    from app.routers.organization import organization_bp
-    from app.routers.room import room_bp
+    from app.routers.user_routes import user_bp
+    from app.routers.event_routes import event_bp
+    from app.routers.organization_routes import organization_bp
+    from app.routers.room_routes import room_bp
 
     for bp in [main_bp, user_bp, event_bp, organization_bp, room_bp]:
         app.register_blueprint(bp)

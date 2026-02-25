@@ -16,7 +16,7 @@
                 {% if active_filters %}<span class="filter-active-label">· filtered</span>{% endif %}
             </p>
         </div>
-        <a href="{{ url_for('event.create_event') }}" class="btn-primary">+ New Event</a>
+        <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">+ New Event</a>
     </div>
 
     <!-- Filter panel -->
@@ -145,7 +145,7 @@
                 </div>
                 {% endif %}
                 <div class="card-actions">
-                    <a href="{{ url_for('event.update_event', id=event.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <a href="{{ url_for('event.update_event_form', id=event.id) }}" class="btn-sm btn-secondary">Edit</a>
                     <form action="{{ url_for('event.delete_event', id=event.id) }}" method="POST" class="inline-form">
                         <button type="submit" class="btn-sm btn-danger">Delete</button>
                     </form>
@@ -165,7 +165,7 @@
         {% else %}
         <h3>No events yet</h3>
         <p>Be the first to create a campus event.</p>
-        <a href="{{ url_for('event.create_event') }}" class="btn-primary">Create Event</a>
+        <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">Create Event</a>
         {% endif %}
     </div>
     {% endif %}

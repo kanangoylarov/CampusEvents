@@ -11,7 +11,7 @@
             <h1>Campus Organizations</h1>
             <p class="page-subtitle">{{ organizations|length }} organization{{ 's' if organizations|length != 1 }}</p>
         </div>
-        <a href="{{ url_for('organization.create_organization') }}" class="btn-primary">+ Register Org</a>
+        <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary">+ Register Org</a>
     </div>
 
     {% if organizations %}
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="card-actions">
-                    <a href="{{ url_for('organization.update_organization', id=org.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <a href="{{ url_for('organization.update_organization_form', id=org.id) }}" class="btn-sm btn-secondary">Edit</a>
                     <form action="{{ url_for('organization.delete_organization', id=org.id) }}" method="POST" class="inline-form">
                         <button type="submit" class="btn-sm btn-danger">Delete</button>
                     </form>
@@ -54,7 +54,7 @@
         <div class="empty-icon">&#127970;</div>
         <h3>No organizations yet</h3>
         <p>Register the first campus organization.</p>
-        <a href="{{ url_for('organization.create_organization') }}" class="btn-primary">Register Organization</a>
+        <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary">Register Organization</a>
     </div>
     {% endif %}
 </div>

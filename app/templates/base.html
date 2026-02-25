@@ -27,8 +27,8 @@
                 <span class="user-greeting">Hi, {{ current_user.full_name.split()[0] }}</span>
                 <a href="{{ url_for('user.logout') }}" class="btn-nav-outline">Logout</a>
             {% else %}
-                <a href="{{ url_for('user.login') }}" class="btn-nav-ghost">Login</a>
-                <a href="{{ url_for('user.register') }}" class="btn-nav-solid">Sign Up</a>
+                <a href="{{ url_for('user.login_form') }}" class="btn-nav-ghost">Login</a>
+                <a href="{{ url_for('user.register_form') }}" class="btn-nav-solid">Sign Up</a>
             {% endif %}
         </div>
     </nav>

@@ -11,7 +11,7 @@
             <h1>Campus Rooms</h1>
             <p class="page-subtitle">{{ rooms|length }} room{{ 's' if rooms|length != 1 }}</p>
         </div>
-        <a href="{{ url_for('room.create_room') }}" class="btn-primary">+ Add Room</a>
+        <a href="{{ url_for('room.create_room_form') }}" class="btn-primary">+ Add Room</a>
     </div>
 
     {% if rooms %}
@@ -62,7 +62,7 @@
                 {% endif %}
 
                 <div class="card-actions">
-                    <a href="{{ url_for('room.update_room', id=room.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <a href="{{ url_for('room.update_room_form', id=room.id) }}" class="btn-sm btn-secondary">Edit</a>
                     <form action="{{ url_for('room.delete_room', id=room.id) }}" method="POST" class="inline-form">
                         <button type="submit" class="btn-sm btn-danger">Delete</button>
                     </form>
@@ -80,7 +80,7 @@
         <div class="empty-icon">&#128205;</div>
         <h3>No rooms added yet</h3>
         <p>Add campus rooms to start assigning events.</p>
-        <a href="{{ url_for('room.create_room') }}" class="btn-primary">Add Room</a>
+        <a href="{{ url_for('room.create_room_form') }}" class="btn-primary">Add Room</a>
     </div>
     {% endif %}
 </div>
