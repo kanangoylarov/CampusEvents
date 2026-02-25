@@ -13,7 +13,6 @@ class Room(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    # One room can host many events (at different times)
     events = db.relationship('Event', backref='venue', lazy=True)
 
     def __repr__(self):

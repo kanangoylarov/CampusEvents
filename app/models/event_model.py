@@ -16,7 +16,6 @@ class Event(db.Model):
     end_time = db.Column(db.Time)
     capacity = db.Column(db.Integer)
 
-    # Foreign keys (each defined once, cleanly)
     organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
 

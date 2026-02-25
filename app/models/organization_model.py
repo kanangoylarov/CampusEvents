@@ -12,7 +12,6 @@ class Organization(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    # One organization can host many events
     events = db.relationship('Event', backref='organizer', lazy=True)
 
     def __repr__(self):
