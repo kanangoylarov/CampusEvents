@@ -1,17 +1,20 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField,SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
+
+login = LoginManager()
+login.init_app(app)
+login.login_view = "login"
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,7 +27,7 @@ class RegisterForm(FlaskForm):
                  render_kw={"placeholder":"Username"})
     password = PasswordField(
         validators
-=[InputRequired(),
+    =[InputRequired(),
         Length(min=8, max=20)],
         render_kw={"placeholder": "Confirm Password"}
         )
