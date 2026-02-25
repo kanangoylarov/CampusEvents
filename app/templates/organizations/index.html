@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Organizations — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='organizations.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Campus Organizations</h1>
+            <p class="page-subtitle">{{ organizations|length }} organization{{ 's' if organizations|length != 1 }}</p>
+        </div>
+        <a href="{{ url_for('organization.create_organization') }}" class="btn-primary">+ Register Org</a>
+    </div>
+
+    {% if organizations %}
+    <div class="org-grid">
+        {% for org in organizations %}
+        <div class="org-card">
+            <div class="org-banner">
+                {% if org.picture %}
+                    <img src="{{ org.picture }}" alt="{{ org.name }}" class="org-logo">
+                {% else %}
+                    <div class="org-logo-placeholder">{{ org.name[0].upper() }}</div>
+                {% endif %}
+            </div>
+            <div class="org-body">
+                <h3 class="org-name">{{ org.name }}</h3>
+                {% if org.description %}
+                <p class="org-desc">{{ org.description[:130] }}{% if org.description|length > 130 %}…{% endif %}</p>
+                {% endif %}
+                <div class="org-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">{{ org.events|length }}</span>
+                        <span class="stat-label">Events</span>
+                    </div>
+                </div>
+                <div class="org-footer">
+                    <span class="org-since">Since {{ org.created_at.strftime('%b %Y') }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">&#127970;</div>
+        <h3>No organizations yet</h3>
+        <p>Register the first campus organization.</p>
+        <a href="{{ url_for('organization.create_organization') }}" class="btn-primary">Register Organization</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

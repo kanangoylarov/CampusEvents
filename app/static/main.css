@@ -1,0 +1,155 @@
+/* ============================================================
+   MAIN.CSS — Home page (hero + feature cards)
+   ============================================================ */
+
+/* --- Hero Section --- */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 4rem;
+    gap: 3rem;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 560px;
+}
+
+.hero-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+    background: var(--primary);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 1.75rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: var(--transition);
+    box-shadow: 0 4px 14px rgba(79,110,247,.35);
+}
+.btn-hero-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79,110,247,.45);
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-hero-outline {
+    background: transparent;
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 1.75rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+.btn-hero-outline:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.hero-illustration {
+    font-size: 8rem;
+    opacity: 0.15;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+/* --- Features Section --- */
+.features {
+    background: var(--bg-subtle);
+    border-top: 1px solid var(--border);
+    padding: 4rem 1.5rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem 1.75rem;
+    transition: var(--transition);
+}
+.feature-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+}
+
+.feature-icon {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--text-primary);
+}
+
+.feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+
+.feature-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+.feature-link:hover {
+    color: var(--primary-dark);
+    text-decoration: none;
+    gap: 0.5rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 3rem 1.5rem 2rem;
+    }
+    .hero-actions { justify-content: center; }
+    .hero-title { font-size: 2rem; }
+    .hero-illustration { display: none; }
+}

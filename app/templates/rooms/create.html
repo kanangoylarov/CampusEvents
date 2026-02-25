@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Add Room — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='rooms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="form-header">
+        <h1>Add Campus Room</h1>
+        <p>Register a room so it can be assigned to events.</p>
+    </div>
+
+    <form action="{{ url_for('room.create_room') }}" method="POST" class="create-form">
+
+        <div class="form-section">
+            <h4 class="section-title">Room Details</h4>
+            <div class="form-group">
+                <label for="room_name">Room Name / Number <span class="required">*</span></label>
+                <input type="text" id="room_name" name="room_name" placeholder="e.g. Conference Hall B" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location / Building <span class="required">*</span></label>
+                <input type="text" id="location" name="location" placeholder="e.g. Science Building, 3rd Floor" required>
+            </div>
+            <div class="form-group">
+                <label for="capacity">Capacity <span class="required">*</span></label>
+                <input type="number" id="capacity" name="capacity" min="1" placeholder="e.g. 80" required>
+            </div>
+            <div class="form-group">
+                <label for="picture">Room Image URL</label>
+                <input type="url" id="picture" name="picture" placeholder="https://example.com/room.jpg">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('room.list_rooms') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Save Room</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

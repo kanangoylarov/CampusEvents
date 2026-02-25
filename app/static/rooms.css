@@ -1,0 +1,116 @@
+/* ============================================================
+   ROOMS.CSS — Rooms list and create form
+   ============================================================ */
+
+/* --- Rooms grid --- */
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* --- Room card --- */
+.room-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+.room-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+    border-color: transparent;
+}
+
+/* --- Room image --- */
+.room-image-wrap {
+    position: relative;
+    height: 160px;
+    background: var(--bg-subtle);
+    overflow: hidden;
+}
+.room-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.room-card:hover .room-image { transform: scale(1.04); }
+
+.room-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+}
+
+/* --- Availability badge --- */
+.room-status-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 100px;
+}
+.status-available { background: var(--success-light); color: #15803d; }
+.status-booked    { background: var(--danger-light);  color: #b91c1c; }
+
+/* --- Room body --- */
+.room-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.room-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* --- Room meta --- */
+.room-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+}
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+}
+.meta-icon { font-size: 0.9rem; flex-shrink: 0; }
+.booked-event { color: var(--danger); font-weight: 500; }
+
+/* --- Room footer --- */
+.room-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+}
+.room-id {
+    font-size: 0.775rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.room-added {
+    font-size: 0.775rem;
+    color: var(--text-muted);
+}

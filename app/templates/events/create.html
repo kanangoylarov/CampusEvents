@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Create Event — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='events.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="form-header">
+        <h1>Create New Event</h1>
+        <p>Fill in the details below to publish your campus event.</p>
+    </div>
+
+    <form action="{{ url_for('event.create_event') }}" method="POST" class="create-form">
+
+        <div class="form-section">
+            <h4 class="section-title">Basic Information</h4>
+            <div class="form-group">
+                <label for="name">Event Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" placeholder="e.g. Annual Tech Summit" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="What is this event about?"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="picture">Cover Image URL</label>
+                <input type="url" id="picture" name="picture" placeholder="https://example.com/image.jpg">
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h4 class="section-title">Date & Time</h4>
+            <div class="form-group">
+                <label for="date">Event Date <span class="required">*</span></label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="start_time">Start Time <span class="required">*</span></label>
+                    <input type="time" id="start_time" name="start_time" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_time">End Time</label>
+                    <input type="time" id="end_time" name="end_time">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h4 class="section-title">Venue & Organizer</h4>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="room_id">Room</label>
+                    <select id="room_id" name="room_id">
+                        <option value="">— Select a room —</option>
+                        {% for room in rooms %}
+                        <option value="{{ room.id }}" {% if room.event %}disabled{% endif %}>
+                            {{ room.room_name }} (cap. {{ room.capacity }})
+                            {% if room.event %} [Booked]{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="organization_id">Organizing Body</label>
+                    <select id="organization_id" name="organization_id">
+                        <option value="">— Select an organization —</option>
+                        {% for org in organizations %}
+                        <option value="{{ org.id }}">{{ org.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="capacity">Max Capacity</label>
+                <input type="number" id="capacity" name="capacity" min="1" placeholder="e.g. 100">
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h4 class="section-title">Settings</h4>
+            <div class="form-group">
+                <label for="for_registration">Registration Link / Info</label>
+                <input type="text" id="for_registration" name="for_registration" placeholder="URL or instructions for RSVP">
+            </div>
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="private" id="private">
+                    <span class="checkbox-custom"></span>
+                    Make this event private
+                </label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('event.list_events') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Publish Event</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
