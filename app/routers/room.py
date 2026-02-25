@@ -29,3 +29,28 @@ def create_room():
         return redirect(url_for('room.list_rooms'))
 
     return render_template('rooms/create.html')
+
+
+@room_bp.route('/rooms/<int:id>/edit', methods=['GET', 'POST'])
+def update_room(id):
+    room = db.get_or_404(Room, id)
+
+    if request.method == 'POST':
+        room.room_name = request.form.get('room_name')
+        room.location = request.form.get('location')
+        room.capacity = request.form.get('capacity') or None
+        room.picture = request.form.get('picture')
+        db.session.commit()
+        flash('Room updated successfully!', 'success')
+        return redirect(url_for('room.list_rooms'))
+
+    return render_template('rooms/edit.html', room=room)
+
+
+@room_bp.route('/rooms/<int:id>/delete', methods=['POST'])
+def delete_room(id):
+    room = db.get_or_404(Room, id)
+    db.session.delete(room)
+    db.session.commit()
+    flash('Room deleted successfully!', 'success')
+    return redirect(url_for('room.list_rooms'))

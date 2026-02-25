@@ -184,3 +184,63 @@ def create_event():
     organizations = Organization.query.order_by(Organization.name).all()
     rooms = Room.query.order_by(Room.room_name).all()
     return render_template('events/create.html', organizations=organizations, rooms=rooms)
+
+
+@event_bp.route('/events/<int:id>/edit', methods=['GET', 'POST'])
+def update_event(id):
+    event = db.get_or_404(Event, id)
+
+    if request.method == 'POST':
+        room_id    = request.form.get('room_id') or None
+        event_date = _parse_date(request.form.get('date'))
+        start_time = _parse_time(request.form.get('start_time'))
+        end_time   = _parse_time(request.form.get('end_time'))
+
+        if room_id and event_date:
+            conflict, blocking = _room_has_conflict(
+                room_id, event_date, start_time, end_time, exclude_id=event.id
+            )
+            if conflict:
+                room = Room.query.get(int(room_id))
+                start_str = blocking.start_time.strftime('%H:%M') if blocking.start_time else '?'
+                end_str   = blocking.end_time.strftime('%H:%M')   if blocking.end_time   else 'end of day'
+                flash(
+                    f'Room "{room.room_name}" is already booked on {event_date} '
+                    f'({start_str} – {end_str}) by "{blocking.name}". '
+                    f'Choose a different room or a non-overlapping time slot.',
+                    'danger'
+                )
+                organizations = Organization.query.order_by(Organization.name).all()
+                rooms = Room.query.order_by(Room.room_name).all()
+                return render_template('events/edit.html', event=event,
+                                       organizations=organizations, rooms=rooms)
+
+        event.name = request.form.get('name')
+        event.description = request.form.get('description')
+        event.picture = request.form.get('picture')
+        event.private = request.form.get('private') == 'on'
+        event.date = event_date
+        event.for_registration = request.form.get('for_registration')
+        event.start_time = start_time
+        event.end_time = end_time
+        event.room_id = room_id
+        event.capacity = request.form.get('capacity') or None
+        event.organization_id = request.form.get('organization_id') or None
+
+        db.session.commit()
+        flash('Event updated successfully!', 'success')
+        return redirect(url_for('event.list_events'))
+
+    organizations = Organization.query.order_by(Organization.name).all()
+    rooms = Room.query.order_by(Room.room_name).all()
+    return render_template('events/edit.html', event=event,
+                           organizations=organizations, rooms=rooms)
+
+
+@event_bp.route('/events/<int:id>/delete', methods=['POST'])
+def delete_event(id):
+    event = db.get_or_404(Event, id)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event deleted successfully!', 'success')
+    return redirect(url_for('event.list_events'))

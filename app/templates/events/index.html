@@ -144,6 +144,12 @@
                     <span class="capacity-pill">&#128101; {{ event.capacity }} seats</span>
                 </div>
                 {% endif %}
+                <div class="card-actions">
+                    <a href="{{ url_for('event.update_event', id=event.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <form action="{{ url_for('event.delete_event', id=event.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
         {% endfor %}

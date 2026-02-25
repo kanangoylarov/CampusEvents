@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Edit Organization — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='organizations.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="form-header">
+        <h1>Edit Organization</h1>
+        <p>Update the details for "{{ org.name }}".</p>
+    </div>
+
+    <form action="{{ url_for('organization.update_organization', id=org.id) }}" method="POST" class="create-form">
+
+        <div class="form-section">
+            <h4 class="section-title">Organization Details</h4>
+            <div class="form-group">
+                <label for="name">Organization Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" value="{{ org.name }}" placeholder="e.g. Computer Science Club" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description <span class="required">*</span></label>
+                <textarea id="description" name="description" rows="5" required
+                    placeholder="What is the mission and focus of this organization?">{{ org.description or '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="picture">Logo / Banner URL</label>
+                <input type="url" id="picture" name="picture" value="{{ org.picture or '' }}" placeholder="https://example.com/logo.png">
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('organization.list_organizations') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

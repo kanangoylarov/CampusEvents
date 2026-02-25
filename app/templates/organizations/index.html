@@ -26,7 +26,7 @@
                 {% endif %}
             </div>
             <div class="org-body">
-                <h3 class="org-name">{{ org.name }}</h3>
+                <h3 class="org-name"><a href="{{ url_for('organization.view_organization', id=org.id) }}">{{ org.name }}</a></h3>
                 {% if org.description %}
                 <p class="org-desc">{{ org.description[:130] }}{% if org.description|length > 130 %}…{% endif %}</p>
                 {% endif %}
@@ -35,6 +35,12 @@
                         <span class="stat-value">{{ org.events|length }}</span>
                         <span class="stat-label">Events</span>
                     </div>
+                </div>
+                <div class="card-actions">
+                    <a href="{{ url_for('organization.update_organization', id=org.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <form action="{{ url_for('organization.delete_organization', id=org.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="btn-sm btn-danger">Delete</button>
+                    </form>
                 </div>
                 <div class="org-footer">
                     <span class="org-since">Since {{ org.created_at.strftime('%b %Y') }}</span>

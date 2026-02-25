@@ -12,6 +12,12 @@ def list_organizations():
     return render_template('organizations/index.html', organizations=organizations)
 
 
+@organization_bp.route('/organizations/<int:id>')
+def view_organization(id):
+    org = db.get_or_404(Organization, id)
+    return render_template('organizations/detail.html', org=org)
+
+
 @organization_bp.route('/organizations/create', methods=['GET', 'POST'])
 def create_organization():
     if request.method == 'POST':
@@ -26,3 +32,27 @@ def create_organization():
         return redirect(url_for('organization.list_organizations'))
 
     return render_template('organizations/create.html')
+
+
+@organization_bp.route('/organizations/<int:id>/edit', methods=['GET', 'POST'])
+def update_organization(id):
+    org = db.get_or_404(Organization, id)
+
+    if request.method == 'POST':
+        org.name = request.form.get('name')
+        org.description = request.form.get('description')
+        org.picture = request.form.get('picture')
+        db.session.commit()
+        flash('Organization updated successfully!', 'success')
+        return redirect(url_for('organization.list_organizations'))
+
+    return render_template('organizations/edit.html', org=org)
+
+
+@organization_bp.route('/organizations/<int:id>/delete', methods=['POST'])
+def delete_organization(id):
+    org = db.get_or_404(Organization, id)
+    db.session.delete(org)
+    db.session.commit()
+    flash('Organization deleted successfully!', 'success')
+    return redirect(url_for('organization.list_organizations'))

@@ -61,6 +61,12 @@
                 </div>
                 {% endif %}
 
+                <div class="card-actions">
+                    <a href="{{ url_for('room.update_room', id=room.id) }}" class="btn-sm btn-secondary">Edit</a>
+                    <form action="{{ url_for('room.delete_room', id=room.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
                 <div class="room-footer">
                     <span class="room-id">Room #{{ room.id }}</span>
                     <span class="room-added">Added {{ room.created_at.strftime('%b %d, %Y') }}</span>

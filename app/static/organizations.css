@@ -102,3 +102,75 @@
     font-size: 0.775rem;
     color: var(--text-muted);
 }
+
+/* --- Org detail page --- */
+.org-detail-header {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    align-items: flex-start;
+}
+.org-detail-banner {
+    width: 160px;
+    height: 160px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.org-detail-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.org-detail-info {
+    flex: 1;
+}
+.org-detail-info h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+}
+.org-detail-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+.org-detail-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+.org-detail-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+.org-events-section {
+    margin-top: 1rem;
+}
+.org-events-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .org-detail-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .org-detail-meta {
+        justify-content: center;
+    }
+    .org-detail-actions {
+        justify-content: center;
+    }
+}
