@@ -13,14 +13,15 @@ def register_form():
 
 @user_bp.post('/register')
 def register():
+    # role həmişə 'user' — formdan gəlmir (task #4)
     user, error = user_service.register_user(
         full_name=request.form.get('full_name'),
         email=request.form.get('email'),
         password=request.form.get('password'),
-        role=request.form.get('role', 'user'),
+        role='user',  # ← həmişə user, admin ola bilməz
     )
     if error:
-        flash(error)
+        flash(error, 'danger')
         return redirect(url_for('user.register_form'))
     flash('Account created successfully! Please log in.', 'success')
     return redirect(url_for('user.login_form'))
@@ -41,7 +42,7 @@ def login():
         login_user(user)
         flash(f'Welcome back, {user.full_name}!', 'success')
         return redirect(url_for('main.index'))
-    flash('Invalid email or password.')
+    flash('Invalid email or password.', 'danger')
     return redirect(url_for('user.login_form'))
 
 
