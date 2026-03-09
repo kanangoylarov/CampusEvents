@@ -6,55 +6,113 @@
     <title>{% block title %}CampusEvents{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="{{ url_for('main.index') }}" class="navbar-brand">
-            <span class="brand-icon">&#127979;</span>
-            CampusEvents
-        </a>
-        <ul class="navbar-links">
-            <li><a href="{{ url_for('event.list_events') }}" class="nav-link">Events</a></li>
-            <li><a href="{{ url_for('organization.list_organizations') }}" class="nav-link">Organizations</a></li>
-            <li><a href="{{ url_for('room.list_rooms') }}" class="nav-link">Rooms</a></li>
-        </ul>
-        <div class="navbar-auth">
-            {% if current_user.is_authenticated %}
-                <span class="user-greeting">Hi, {{ current_user.full_name.split()[0] }}</span>
-                <a href="{{ url_for('user.logout') }}" class="btn-nav-outline">Logout</a>
-            {% else %}
-                <a href="{{ url_for('user.login_form') }}" class="btn-nav-ghost">Login</a>
-                <a href="{{ url_for('user.register_form') }}" class="btn-nav-solid">Sign Up</a>
-            {% endif %}
+<nav class="navbar">
+    <!-- Logo -->
+    <a href="{{ url_for('main.index') }}" class="navbar-brand">
+        <div class="brand-logo-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z"/>
+                <path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"/>
+            </svg>
         </div>
-    </nav>
+        <span class="brand-text">CampusEvents</span>
+    </a>
 
-    <div class="flash-container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        <span class="alert-icon">
-                            {% if category == 'success' %}&#10003;{% else %}&#9888;{% endif %}
-                        </span>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+    <!-- Nav links - sağda -->
+    <ul class="navbar-links">
+        <li><a href="{{ url_for('event.list_events') }}" class="nav-link">Events</a></li>
+        <li><a href="{{ url_for('room.list_rooms') }}" class="nav-link">Rooms</a></li>
+        <li><a href="{{ url_for('organization.list_organizations') }}" class="nav-link">Organizations</a></li>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link nav-link-admin">Admin Panel</a></li>
+        {% endif %}
+    </ul>
+
+    <!-- Auth -->
+    <div class="navbar-auth">
+        {% if current_user.is_authenticated %}
+            <span class="user-greeting">Hi, {{ current_user.full_name.split()[0] }}</span>
+            <a href="{{ url_for('user.logout') }}" class="btn-nav-outline">Logout</a>
+            <div class="nav-avatar">{{ current_user.full_name[0].upper() }}</div>
+        {% else %}
+            <a href="{{ url_for('user.login_form') }}" class="btn-nav-ghost">Login</a>
+            <a href="{{ url_for('user.register_form') }}" class="btn-nav-solid">Sign Up</a>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- Flash messages -->
+<div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <span class="alert-icon">
+                        {% if category == 'success' %}&#10003;{% else %}&#9888;{% endif %}
+                    </span>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<main class="page-main">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-grid">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+            <div class="footer-brand-name">
+                <div class="brand-logo-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z"/>
+                        <path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"/>
+                    </svg>
+                </div>
+                CampusEvents
+            </div>
+            <p class="footer-desc">The central hub for student life. Our mission is to enhance the university experience by connecting students, faculty, and staff through meaningful events and accessible facilities.</p>
+        </div>
+
+        <!-- Platform -->
+        <div>
+            <p class="footer-col-title">Platform</p>
+            <ul class="footer-links">
+                <li><a href="{{ url_for('event.list_events') }}">Browse Events</a></li>
+                <li><a href="{{ url_for('room.list_rooms') }}">Room Reservations</a></li>
+                <li><a href="{{ url_for('organization.list_organizations') }}">Organizations</a></li>
+                <li><a href="#">Help Center</a></li>
+            </ul>
+        </div>
+
+        <!-- Connect -->
+        <div>
+            <p class="footer-col-title">Connect</p>
+            <ul class="footer-links">
+                <li><a href="#">Contact Support</a></li>
+                <li><a href="#">Student Union</a></li>
+                <li><a href="#">Faculty Portal</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+
     </div>
 
-    <main class="page-main">
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer class="footer">
-        <p>&copy; 2025 CampusEvents &mdash; All rights reserved.</p>
-    </footer>
+    <div class="footer-bottom">
+        &copy; 2024 CampusEvents University Platform. All rights reserved.
+    </div>
+</footer>
 
 </body>
 </html>

@@ -18,8 +18,9 @@ def create_app(config_name='development'):
     from app.routers.event_routes import event_bp
     from app.routers.organization_routes import organization_bp
     from app.routers.room_routes import room_bp
+    from app.routers.admin_routes import admin_bp
 
-    for bp in [main_bp, user_bp, event_bp, organization_bp, room_bp]:
+    for bp in [main_bp, user_bp, event_bp, organization_bp, room_bp, admin_bp]:
         app.register_blueprint(bp)
 
     # Create all tables if they don't exist

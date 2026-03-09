@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block title %}Create Room{% endblock %}
+{% block page_title %}Create Room{% endblock %}
+
+{% block content %}
+<div class="admin-form-card">
+    <form method="POST" action="{{ url_for('admin.create_room') }}" enctype="multipart/form-data" class="create-form">
+        <div class="form-section">
+            <p class="section-title">Room Information</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Room Name / Number <span class="required">*</span></label>
+                    <input type="text" name="room_name" required placeholder="e.g. Room 101">
+                </div>
+                <div class="form-group">
+                    <label>Capacity</label>
+                    <input type="number" name="capacity" min="1" placeholder="Max people">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" placeholder="e.g. Building A, Floor 2">
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <div class="file-upload-area">
+                    <input type="file" name="picture" accept="image/*">
+                    <div class="file-upload-icon">&#128247;</div>
+                    <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+                    <div class="file-upload-hint">PNG, JPG, GIF, WebP</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a href="{{ url_for('admin.list_rooms') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Create Room</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
