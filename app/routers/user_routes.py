@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response, current_app
 from flask_login import login_user, logout_user, login_required
 
 from app.services import user_service
@@ -43,7 +43,15 @@ def login():
         login_user(user)
         token = generate_token(user.id)
         response = make_response(redirect(url_for('main.index')))
-        response.set_cookie('jwt_token', token, httponly=True, samesite='Lax')
+        max_age = current_app.config['JWT_EXPIRATION_HOURS'] * 60 * 60
+        response.set_cookie(
+            'jwt_token',
+            token,
+            httponly=True,
+            samesite='Lax',
+            secure=not current_app.debug,
+            max_age=max_age,
+        )
         flash(f'Welcome back, {user.full_name}!', 'success')
         return response
     flash('Invalid email or password.', 'danger')
