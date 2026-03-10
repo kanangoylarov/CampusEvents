@@ -10,19 +10,28 @@
     <!-- Page header -->
     <div class="page-header">
         <div>
-            <h1>Campus Events</h1>
-            <p class="page-subtitle">
-                {{ events|length }} event{{ 's' if events|length != 1 }}
-                {% if active_filters %}<span class="filter-active-label">· filtered</span>{% endif %}
-            </p>
+            <h1>Discover Events</h1>
+            <p class="page-subtitle">Join the most exciting activities across campus this week.</p>
         </div>
-        <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">+ New Event</a>
+        <div class="events-search-wrap">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="eventSearch" placeholder="Search events, clubs, or rooms..." class="events-search-input">
+        </div>
     </div>
 
-    <!-- Filter panel -->
-    <form method="GET" action="{{ url_for('event.list_events') }}" class="filter-panel">
-        <div class="filter-grid">
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Events</button>
+        <button class="filter-tab" data-filter="today">&#128197; Today</button>
+        <button class="filter-tab" data-filter="workshop">Workshops</button>
+        <button class="filter-tab" data-filter="social">&#128101; Social</button>
+        <button class="filter-tab" data-filter="academic">&#127891; Academic</button>
+        <button class="filter-tab filter-tab-more">&#9776; More Filters</button>
+    </div>
 
+    <!-- Advanced filter panel -->
+    <form method="GET" action="{{ url_for('event.list_events') }}" class="filter-panel" id="advancedFilter" style="display:none;">
+        <div class="filter-grid">
             <div class="filter-group">
                 <label class="filter-label">Organization</label>
                 <select name="org_id" class="filter-input">
@@ -34,33 +43,23 @@
                     {% endfor %}
                 </select>
             </div>
-
             <div class="filter-group">
                 <label class="filter-label">Date from</label>
-                <input type="date" name="date_from" class="filter-input"
-                       value="{{ filters.date_from }}">
+                <input type="date" name="date_from" class="filter-input" value="{{ filters.date_from }}">
             </div>
-
             <div class="filter-group">
                 <label class="filter-label">Date to</label>
-                <input type="date" name="date_to" class="filter-input"
-                       value="{{ filters.date_to }}">
+                <input type="date" name="date_to" class="filter-input" value="{{ filters.date_to }}">
             </div>
-
             <div class="filter-group">
-                <label class="filter-label">Start time from</label>
-                <input type="time" name="time_from" class="filter-input"
-                       value="{{ filters.time_from }}">
+                <label class="filter-label">Time from</label>
+                <input type="time" name="time_from" class="filter-input" value="{{ filters.time_from }}">
             </div>
-
             <div class="filter-group">
-                <label class="filter-label">Start time to</label>
-                <input type="time" name="time_to" class="filter-input"
-                       value="{{ filters.time_to }}">
+                <label class="filter-label">Time to</label>
+                <input type="time" name="time_to" class="filter-input" value="{{ filters.time_to }}">
             </div>
-
         </div>
-
         <div class="filter-actions">
             <button type="submit" class="btn-filter-apply">Apply Filters</button>
             {% if active_filters %}
@@ -69,37 +68,27 @@
         </div>
     </form>
 
-    <!-- Active filter chips -->
-    {% if active_filters %}
-    <div class="filter-chips">
-        {% if filters.org_id %}
-            {% for org in organizations %}{% if org.id|string == filters.org_id %}
-            <span class="chip">&#127970; {{ org.name }}</span>
-            {% endif %}{% endfor %}
-        {% endif %}
-        {% if filters.date_from or filters.date_to %}
-        <span class="chip">&#128197;
-            {% if filters.date_from %}from {{ filters.date_from }}{% endif %}
-            {% if filters.date_to %} to {{ filters.date_to }}{% endif %}
-        </span>
-        {% endif %}
-        {% if filters.time_from or filters.time_to %}
-        <span class="chip">&#128336;
-            {% if filters.time_from %}from {{ filters.time_from }}{% endif %}
-            {% if filters.time_to %} to {{ filters.time_to }}{% endif %}
-        </span>
-        {% endif %}
-    </div>
-    {% endif %}
-
     <!-- Events grid -->
     {% if events %}
     <div class="events-grid">
         {% for event in events %}
-        <div class="event-card">
-            <div class="event-image-wrap">
+        <div class="event-card"
+             data-id="{{ event.id }}"
+             data-name="{{ event.name | e }}"
+             data-desc="{{ (event.description or 'No description available.') | e }}"
+             data-date="{{ event.date.strftime('%b %d, %Y') if event.date else 'TBD' }}"
+             data-start="{{ event.start_time.strftime('%H:%M') if event.start_time else 'TBD' }}"
+             data-end="{{ event.end_time.strftime('%H:%M') if event.end_time else '' }}"
+             data-venue="{{ (event.venue.room_name if event.venue else 'No room assigned') | e }}"
+             data-organizer="{{ (event.organizer.name if event.organizer else 'Unknown') | e }}"
+             data-capacity="{{ event.capacity or '' }}"
+             data-picture="{{ 'uploads/' + event.picture if event.picture else '' }}"
+             data-private="{{ 'true' if event.private else 'false' }}">
+
+            <div class="event-image-wrap" onclick="openModalFromCard(this.closest('.event-card'))">
                 {% if event.picture %}
-                    <img src="{{ url_for('static', filename='uploads/' + event.picture) }}" alt="{{ event.name }}" class="event-image">
+                    <img src="{{ url_for('static', filename='uploads/' + event.picture) }}"
+                         alt="{{ event.name }}" class="event-image">
                 {% else %}
                     <div class="event-image-placeholder">&#128197;</div>
                 {% endif %}
@@ -107,11 +96,19 @@
                     {% if event.private %}Private{% else %}Public{% endif %}
                 </span>
             </div>
+
             <div class="event-body">
-                <h3 class="event-name">{{ event.name }}</h3>
+                <h3 class="event-name"
+                    onclick="openModalFromCard(this.closest('.event-card'))">
+                    {{ event.name }}
+                </h3>
+
                 {% if event.description %}
-                <p class="event-desc">{{ event.description[:110] }}{% if event.description|length > 110 %}…{% endif %}</p>
+                <p class="event-desc">
+                    {{ event.description[:110] }}{% if event.description|length > 110 %}…{% endif %}
+                </p>
                 {% endif %}
+
                 <div class="event-meta">
                     <div class="meta-item">
                         <span class="meta-icon">&#128197;</span>
@@ -123,9 +120,7 @@
                             {% if event.start_time %}
                                 {{ event.start_time.strftime('%H:%M') }}
                                 {% if event.end_time %} &ndash; {{ event.end_time.strftime('%H:%M') }}{% endif %}
-                            {% else %}
-                                TBD
-                            {% endif %}
+                            {% else %}TBD{% endif %}
                         </span>
                     </div>
                     <div class="meta-item">
@@ -138,17 +133,29 @@
                         <span>{{ event.organizer.name }}</span>
                     </div>
                     {% endif %}
+                    {% if event.capacity %}
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128101;</span>
+                        <span>Capacity: {{ event.capacity }} Students</span>
+                    </div>
+                    {% endif %}
                 </div>
-                {% if event.capacity %}
-                <div class="event-capacity">
-                    <span class="capacity-pill">&#128101; {{ event.capacity }} seats</span>
-                </div>
-                {% endif %}
+
+                <!-- card-actions: admin → Edit/Delete, user → Register Now -->
                 <div class="card-actions">
-                    <a href="{{ url_for('event.update_event_form', id=event.id) }}" class="btn-sm btn-secondary">Edit</a>
-                    <form action="{{ url_for('event.delete_event', id=event.id) }}" method="POST" class="inline-form">
-                        <button type="submit" class="btn-sm btn-danger">Delete</button>
-                    </form>
+                    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                        <a href="{{ url_for('event.update_event_form', id=event.id) }}"
+                           class="btn-sm btn-secondary">Edit</a>
+                        <form action="{{ url_for('event.delete_event', id=event.id) }}"
+                              method="POST" class="inline-form">
+                            <button type="submit" class="btn-sm btn-danger">Delete</button>
+                        </form>
+                    {% else %}
+                        <button class="btn-register-now"
+                                onclick="openModalFromCard(this.closest('.event-card'))">
+                            Register Now
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -164,11 +171,147 @@
         <a href="{{ url_for('event.list_events') }}" class="btn-primary">Clear Filters</a>
         {% else %}
         <h3>No events yet</h3>
-        <p>Be the first to create a campus event.</p>
-        <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">Create Event</a>
+        <p>Check back soon for upcoming campus events.</p>
         {% endif %}
     </div>
     {% endif %}
 
 </div>
+
+<!-- ===== EVENT DETAIL MODAL ===== -->
+<div class="modal-overlay" id="eventModal">
+    <div class="modal-container">
+        <button class="modal-close" onclick="closeEventModal()">&times;</button>
+
+        <div class="modal-image-wrap" id="modalImage">
+            <div class="modal-image-placeholder">&#128197;</div>
+        </div>
+
+        <div class="modal-content">
+            <div class="modal-left">
+                <span class="modal-category" id="modalCategory">EVENT</span>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <div class="modal-meta" id="modalMeta"></div>
+                <div class="modal-section">
+                    <h4><span>&#128196;</span> About the Event</h4>
+                    <p id="modalDescription"></p>
+                </div>
+            </div>
+
+            <div class="modal-right">
+                <div class="modal-info-card">
+                    <p class="modal-info-label">Organized by</p>
+                    <p class="modal-info-value" id="modalOrganizer"></p>
+                </div>
+                <div class="modal-info-card">
+                    <p class="modal-info-label">Capacity</p>
+                    <p class="modal-info-value" id="modalCapacity"></p>
+                </div>
+
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'admin' %}
+                        <a href="#" class="btn-modal-register btn-modal-admin"
+                           id="modalEditBtn">&#9998; Edit Event</a>
+                    {% else %}
+                        <form method="POST" id="modalRegisterForm">
+                            <button type="submit" class="btn-modal-register">
+                                &#128279; Register Now
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('user.login_form') }}" class="btn-modal-register">
+                        &#128274; Log in to Register
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openModalFromCard(card) {
+    var name      = card.getAttribute('data-name');
+    var desc      = card.getAttribute('data-desc');
+    var date      = card.getAttribute('data-date');
+    var start     = card.getAttribute('data-start');
+    var end       = card.getAttribute('data-end');
+    var venue     = card.getAttribute('data-venue');
+    var organizer = card.getAttribute('data-organizer');
+    var capacity  = card.getAttribute('data-capacity');
+    var picture   = card.getAttribute('data-picture');
+    var id        = card.getAttribute('data-id');
+    var isPrivate = card.getAttribute('data-private') === 'true';
+
+    document.getElementById('modalTitle').textContent       = name;
+    document.getElementById('modalDescription').textContent = desc;
+    document.getElementById('modalOrganizer').textContent   = organizer;
+    document.getElementById('modalCategory').textContent    = isPrivate ? 'PRIVATE' : 'PUBLIC';
+    document.getElementById('modalCapacity').textContent    = capacity ? capacity + ' seats' : 'Unlimited';
+
+    var timeStr = end ? (start + ' - ' + end) : start;
+    document.getElementById('modalMeta').innerHTML =
+        '<div class="modal-meta-item"><span>&#128197;</span> ' + date + '</div>' +
+        '<div class="modal-meta-item"><span>&#128336;</span> ' + timeStr + '</div>' +
+        '<div class="modal-meta-item"><span>&#128205;</span> ' + venue + '</div>';
+
+    var imgWrap = document.getElementById('modalImage');
+    if (picture) {
+        imgWrap.innerHTML = '<img src="/static/' + picture + '" alt="' + name + '">';
+    } else {
+        imgWrap.innerHTML = '<div class="modal-image-placeholder">&#128197;</div>';
+    }
+
+    // Register form action
+    var regForm = document.getElementById('modalRegisterForm');
+    if (regForm) {
+        regForm.action = '/events/' + id + '/register';
+    }
+
+    // Admin: edit button link
+    var editBtn = document.getElementById('modalEditBtn');
+    if (editBtn) {
+        editBtn.href = '/events/' + id + '/edit';
+    }
+
+    document.getElementById('eventModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEventModal() {
+    document.getElementById('eventModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Overlay-a click edəndə bağlanır
+document.getElementById('eventModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEventModal();
+    }
+});
+
+// Filter tabs
+document.querySelectorAll('.filter-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        if (this.classList.contains('filter-tab-more')) {
+            var panel = document.getElementById('advancedFilter');
+            panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+            return;
+        }
+        document.querySelectorAll('.filter-tab').forEach(function(t) {
+            t.classList.remove('active');
+        });
+        this.classList.add('active');
+    });
+});
+
+// Search
+document.getElementById('eventSearch').addEventListener('input', function() {
+    var q = this.value.toLowerCase();
+    document.querySelectorAll('.event-card').forEach(function(card) {
+        var name = card.querySelector('.event-name').textContent.toLowerCase();
+        card.style.display = name.includes(q) ? '' : 'none';
+    });
+});
+</script>
 {% endblock %}
