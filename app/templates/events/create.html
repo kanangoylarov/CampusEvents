@@ -72,12 +72,28 @@
                 </div>
                 <div class="form-group">
                     <label for="organization_id">Organizing Body</label>
+<<<<<<< HEAD
                     <select id="organization_id" name="organization_id">
                         <option value="">— Select an organization —</option>
                         {% for org in organizations %}
                         <option value="{{ org.id }}">{{ org.name }}</option>
                         {% endfor %}
                     </select>
+=======
+                    <select id="organization_id" name="organization_id"
+                        {% if current_user.role == 'organization' and current_user.organization_id %}disabled{% endif %}>
+                        <option value="">— Select an organization —</option>
+                        {% for org in organizations %}
+                        <option value="{{ org.id }}"
+                            {% if current_user.role == 'organization' and current_user.organization_id == org.id %}selected{% endif %}>
+                            {{ org.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if current_user.role == 'organization' and current_user.organization_id %}
+                    <input type="hidden" name="organization_id" value="{{ current_user.organization_id }}">
+                    {% endif %}
+>>>>>>> origin/kanan
                 </div>
             </div>
             <div class="form-group">

@@ -1,8 +1,17 @@
+<<<<<<< HEAD
 from flask import Flask
 from flask_jwt_extended import get_jwt_identity
 
 from app.extensions import db, jwt
 from app.config import config_by_name
+=======
+from flask import Flask, request
+from flask_login import current_user, login_user
+
+from app.extensions import db, login_manager
+from app.config import config_by_name
+from app.jwt_utils import decode_token
+>>>>>>> origin/kanan
 
 
 class CurrentUser:
@@ -22,11 +31,32 @@ def create_app(config_name='development'):
 
     # Initialize extensions
     db.init_app(app)
+<<<<<<< HEAD
     jwt.init_app(app)
+=======
+    login_manager.init_app(app)
+
+    @app.before_request
+    def login_from_jwt_cookie():
+        if current_user.is_authenticated:
+            return
+        token = request.cookies.get('jwt_token')
+        if not token:
+            return
+        user_id = decode_token(token)
+        if not user_id:
+            return
+        from app.models.user_model import User
+
+        user = User.query.get(user_id)
+        if user:
+            login_user(user)
+>>>>>>> origin/kanan
 
     # Template context processor for JWT-based user info
     @app.context_processor
     def inject_current_user():
+<<<<<<< HEAD
         try:
             user_id = get_jwt_identity()
             if user_id:
@@ -36,6 +66,9 @@ def create_app(config_name='development'):
         except Exception:
             pass
         return {'current_user': CurrentUser(None)}
+=======
+        return {'current_user': CurrentUser(current_user if current_user.is_authenticated else None)}
+>>>>>>> origin/kanan
 
     # Register blueprints
     from app.routers.main import main_bp

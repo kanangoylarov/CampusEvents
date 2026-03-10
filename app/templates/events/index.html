@@ -10,6 +10,7 @@
     <!-- Page header -->
     <div class="page-header">
         <div>
+<<<<<<< HEAD
             <h1>Campus Events</h1>
             <p class="page-subtitle">
                 {{ events|length }} event{{ 's' if events|length != 1 }}
@@ -23,6 +24,35 @@
     <form method="GET" action="{{ url_for('event.list_events') }}" class="filter-panel">
         <div class="filter-grid">
 
+=======
+            <h1>Discover Events</h1>
+            <p class="page-subtitle">Join the most exciting activities across campus this week.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            {% if current_user.is_authenticated and (current_user.role == 'organization' or current_user.role == 'admin') %}
+            <a href="{{ url_for('event.create_event_form') }}" class="btn-primary" style="white-space:nowrap;">+ New Event</a>
+            {% endif %}
+            <div class="events-search-wrap">
+                <span class="search-icon">&#128269;</span>
+                <input type="text" id="eventSearch" placeholder="Search events, clubs, or rooms..." class="events-search-input">
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Events</button>
+        <button class="filter-tab" data-filter="today">&#128197; Today</button>
+        <button class="filter-tab" data-filter="workshop">Workshops</button>
+        <button class="filter-tab" data-filter="social">&#128101; Social</button>
+        <button class="filter-tab" data-filter="academic">&#127891; Academic</button>
+        <button class="filter-tab filter-tab-more">&#9776; More Filters</button>
+    </div>
+
+    <!-- Advanced filter panel -->
+    <form method="GET" action="{{ url_for('event.list_events') }}" class="filter-panel" id="advancedFilter" style="display:none;">
+        <div class="filter-grid">
+>>>>>>> origin/kanan
             <div class="filter-group">
                 <label class="filter-label">Organization</label>
                 <select name="org_id" class="filter-input">
@@ -34,6 +64,7 @@
                     {% endfor %}
                 </select>
             </div>
+<<<<<<< HEAD
 
             <div class="filter-group">
                 <label class="filter-label">Date from</label>
@@ -61,6 +92,25 @@
 
         </div>
 
+=======
+            <div class="filter-group">
+                <label class="filter-label">Date from</label>
+                <input type="date" name="date_from" class="filter-input" value="{{ filters.date_from }}">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Date to</label>
+                <input type="date" name="date_to" class="filter-input" value="{{ filters.date_to }}">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Time from</label>
+                <input type="time" name="time_from" class="filter-input" value="{{ filters.time_from }}">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Time to</label>
+                <input type="time" name="time_to" class="filter-input" value="{{ filters.time_to }}">
+            </div>
+        </div>
+>>>>>>> origin/kanan
         <div class="filter-actions">
             <button type="submit" class="btn-filter-apply">Apply Filters</button>
             {% if active_filters %}
@@ -69,6 +119,7 @@
         </div>
     </form>
 
+<<<<<<< HEAD
     <!-- Active filter chips -->
     {% if active_filters %}
     <div class="filter-chips">
@@ -92,14 +143,38 @@
     </div>
     {% endif %}
 
+=======
+>>>>>>> origin/kanan
     <!-- Events grid -->
     {% if events %}
     <div class="events-grid">
         {% for event in events %}
+<<<<<<< HEAD
         <div class="event-card">
             <div class="event-image-wrap">
                 {% if event.picture %}
                     <img src="{{ url_for('static', filename='uploads/' + event.picture) }}" alt="{{ event.name }}" class="event-image">
+=======
+        <div class="event-card"
+             data-id="{{ event.id }}"
+             data-name="{{ event.name | e }}"
+             data-desc="{{ (event.description or 'No description available.') | e }}"
+             data-date="{{ event.date.strftime('%b %d, %Y') if event.date else 'TBD' }}"
+             data-start="{{ event.start_time.strftime('%H:%M') if event.start_time else 'TBD' }}"
+             data-end="{{ event.end_time.strftime('%H:%M') if event.end_time else '' }}"
+             data-venue="{{ (event.venue.room_name if event.venue else 'No room assigned') | e }}"
+             data-organizer="{{ (event.organizer.name if event.organizer else 'Unknown') | e }}"
+             data-capacity="{{ event.capacity or '' }}"
+             data-picture="{{ 'uploads/' + event.picture if event.picture else '' }}"
+             data-private="{{ 'true' if event.private else 'false' }}"
+             data-org-id="{{ event.organization_id or '' }}"
+             data-register="{{ event.for_registration or '' }}">
+
+            <div class="event-image-wrap" onclick="openModalFromCard(this.closest('.event-card'))">
+                {% if event.picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + event.picture) }}"
+                         alt="{{ event.name }}" class="event-image">
+>>>>>>> origin/kanan
                 {% else %}
                     <div class="event-image-placeholder">&#128197;</div>
                 {% endif %}
@@ -107,11 +182,27 @@
                     {% if event.private %}Private{% else %}Public{% endif %}
                 </span>
             </div>
+<<<<<<< HEAD
             <div class="event-body">
                 <h3 class="event-name">{{ event.name }}</h3>
                 {% if event.description %}
                 <p class="event-desc">{{ event.description[:110] }}{% if event.description|length > 110 %}…{% endif %}</p>
                 {% endif %}
+=======
+
+            <div class="event-body">
+                <h3 class="event-name"
+                    onclick="openModalFromCard(this.closest('.event-card'))">
+                    {{ event.name }}
+                </h3>
+
+                {% if event.description %}
+                <p class="event-desc">
+                    {{ event.description[:110] }}{% if event.description|length > 110 %}…{% endif %}
+                </p>
+                {% endif %}
+
+>>>>>>> origin/kanan
                 <div class="event-meta">
                     <div class="meta-item">
                         <span class="meta-icon">&#128197;</span>
@@ -123,9 +214,13 @@
                             {% if event.start_time %}
                                 {{ event.start_time.strftime('%H:%M') }}
                                 {% if event.end_time %} &ndash; {{ event.end_time.strftime('%H:%M') }}{% endif %}
+<<<<<<< HEAD
                             {% else %}
                                 TBD
                             {% endif %}
+=======
+                            {% else %}TBD{% endif %}
+>>>>>>> origin/kanan
                         </span>
                     </div>
                     <div class="meta-item">
@@ -138,6 +233,7 @@
                         <span>{{ event.organizer.name }}</span>
                     </div>
                     {% endif %}
+<<<<<<< HEAD
                 </div>
                 {% if event.capacity %}
                 <div class="event-capacity">
@@ -149,6 +245,31 @@
                     <form action="{{ url_for('event.delete_event', id=event.id) }}" method="POST" class="inline-form">
                         <button type="submit" class="btn-sm btn-danger">Delete</button>
                     </form>
+=======
+                    {% if event.capacity %}
+                    <div class="meta-item">
+                        <span class="meta-icon">&#128101;</span>
+                        <span>Capacity: {{ event.capacity }} Students</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- card-actions: admin/org-owner → Edit/Delete, others → Register Now -->
+                <div class="card-actions">
+                    {% if current_user.is_authenticated and (current_user.role == 'admin' or (current_user.role == 'organization' and current_user.organization_id and current_user.organization_id == event.organization_id)) %}
+                        <a href="{{ url_for('event.update_event_form', id=event.id) }}"
+                           class="btn-sm btn-secondary">Edit</a>
+                        <form action="{{ url_for('event.delete_event', id=event.id) }}"
+                              method="POST" class="inline-form">
+                            <button type="submit" class="btn-sm btn-danger">Delete</button>
+                        </form>
+                    {% else %}
+                        <button class="btn-register-now"
+                                onclick="openModalFromCard(this.closest('.event-card'))">
+                            Register Now
+                        </button>
+                    {% endif %}
+>>>>>>> origin/kanan
                 </div>
             </div>
         </div>
@@ -164,11 +285,173 @@
         <a href="{{ url_for('event.list_events') }}" class="btn-primary">Clear Filters</a>
         {% else %}
         <h3>No events yet</h3>
+<<<<<<< HEAD
         <p>Be the first to create a campus event.</p>
         <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">Create Event</a>
+=======
+        <p>Check back soon for upcoming campus events.</p>
+>>>>>>> origin/kanan
         {% endif %}
     </div>
     {% endif %}
 
 </div>
+<<<<<<< HEAD
 {% endblock %}
+=======
+
+<!-- ===== EVENT DETAIL MODAL ===== -->
+<div class="modal-overlay" id="eventModal">
+    <div class="modal-container">
+        <button class="modal-close" onclick="closeEventModal()">&times;</button>
+
+        <div class="modal-image-wrap" id="modalImage">
+            <div class="modal-image-placeholder">&#128197;</div>
+        </div>
+
+        <div class="modal-content">
+            <div class="modal-left">
+                <span class="modal-category" id="modalCategory">EVENT</span>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <div class="modal-meta" id="modalMeta"></div>
+                <div class="modal-section">
+                    <h4><span>&#128196;</span> About the Event</h4>
+                    <p id="modalDescription"></p>
+                </div>
+            </div>
+
+            <div class="modal-right">
+                <div class="modal-info-card">
+                    <p class="modal-info-label">Organized by</p>
+                    <p class="modal-info-value" id="modalOrganizer"></p>
+                </div>
+                <div class="modal-info-card">
+                    <p class="modal-info-label">Capacity</p>
+                    <p class="modal-info-value" id="modalCapacity"></p>
+                </div>
+
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'admin' or current_user.role == 'organization' %}
+                        <a href="#" class="btn-modal-register btn-modal-admin"
+                           id="modalEditBtn" style="display:none;">&#9998; Edit Event</a>
+                    {% endif %}
+                    <a href="#" class="btn-modal-register" id="modalRegisterBtn"
+                       target="_blank" style="display:none;">
+                        &#128279; Register Now
+                    </a>
+                    <p class="modal-no-link" id="modalNoLink" style="display:none;
+                       font-size:0.85rem; color:var(--text-secondary); text-align:center;">
+                        No registration link available.
+                    </p>
+                {% else %}
+                    <a href="{{ url_for('user.login_form') }}" class="btn-modal-register">
+                        &#128274; Log in to Register
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var currentUserRole = '{{ current_user.role if current_user.is_authenticated else "" }}';
+var currentUserOrgId = '{{ current_user.organization_id if current_user.is_authenticated and current_user.organization_id else "" }}';
+
+function openModalFromCard(card) {
+    var name      = card.getAttribute('data-name');
+    var desc      = card.getAttribute('data-desc');
+    var date      = card.getAttribute('data-date');
+    var start     = card.getAttribute('data-start');
+    var end       = card.getAttribute('data-end');
+    var venue     = card.getAttribute('data-venue');
+    var organizer = card.getAttribute('data-organizer');
+    var capacity  = card.getAttribute('data-capacity');
+    var picture   = card.getAttribute('data-picture');
+    var id        = card.getAttribute('data-id');
+    var isPrivate = card.getAttribute('data-private') === 'true';
+
+    document.getElementById('modalTitle').textContent       = name;
+    document.getElementById('modalDescription').textContent = desc;
+    document.getElementById('modalOrganizer').textContent   = organizer;
+    document.getElementById('modalCategory').textContent    = isPrivate ? 'PRIVATE' : 'PUBLIC';
+    document.getElementById('modalCapacity').textContent    = capacity ? capacity + ' seats' : 'Unlimited';
+
+    var timeStr = end ? (start + ' - ' + end) : start;
+    document.getElementById('modalMeta').innerHTML =
+        '<div class="modal-meta-item"><span>&#128197;</span> ' + date + '</div>' +
+        '<div class="modal-meta-item"><span>&#128336;</span> ' + timeStr + '</div>' +
+        '<div class="modal-meta-item"><span>&#128205;</span> ' + venue + '</div>';
+
+    var imgWrap = document.getElementById('modalImage');
+    if (picture) {
+        imgWrap.innerHTML = '<img src="/static/' + picture + '" alt="' + name + '">';
+    } else {
+        imgWrap.innerHTML = '<div class="modal-image-placeholder">&#128197;</div>';
+    }
+
+    // Register link
+    var regBtn = document.getElementById('modalRegisterBtn');
+    var noLink = document.getElementById('modalNoLink');
+    var registerUrl = card.getAttribute('data-register');
+    if (regBtn) {
+        if (registerUrl) {
+            regBtn.href = registerUrl;
+            regBtn.style.display = '';
+            if (noLink) noLink.style.display = 'none';
+        } else {
+            regBtn.style.display = 'none';
+            if (noLink) noLink.style.display = '';
+        }
+    }
+
+    // Admin/Org-owner: edit button link
+    var editBtn = document.getElementById('modalEditBtn');
+    if (editBtn) {
+        var eventOrgId = card.getAttribute('data-org-id');
+        var canEdit = currentUserRole === 'admin' || (currentUserRole === 'organization' && currentUserOrgId && currentUserOrgId === eventOrgId);
+        editBtn.style.display = canEdit ? '' : 'none';
+        editBtn.href = '/events/' + id + '/edit';
+    }
+
+    document.getElementById('eventModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEventModal() {
+    document.getElementById('eventModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Overlay-a click edəndə bağlanır
+document.getElementById('eventModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeEventModal();
+    }
+});
+
+// Filter tabs
+document.querySelectorAll('.filter-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        if (this.classList.contains('filter-tab-more')) {
+            var panel = document.getElementById('advancedFilter');
+            panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+            return;
+        }
+        document.querySelectorAll('.filter-tab').forEach(function(t) {
+            t.classList.remove('active');
+        });
+        this.classList.add('active');
+    });
+});
+
+// Search
+document.getElementById('eventSearch').addEventListener('input', function() {
+    var q = this.value.toLowerCase();
+    document.querySelectorAll('.event-card').forEach(function(card) {
+        var name = card.querySelector('.event-name').textContent.toLowerCase();
+        card.style.display = name.includes(q) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}
+>>>>>>> origin/kanan

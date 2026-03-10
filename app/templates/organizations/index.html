@@ -6,18 +6,41 @@
 
 {% block content %}
 <div class="page-container">
+<<<<<<< HEAD
     <div class="page-header">
         <div>
             <h1>Campus Organizations</h1>
             <p class="page-subtitle">{{ organizations|length }} organization{{ 's' if organizations|length != 1 }}</p>
         </div>
         <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary">+ Register Org</a>
+=======
+
+    <!-- Page header -->
+    <div class="org-page-header">
+        <div>
+            <h1 class="org-page-title">Organizations</h1>
+            <p class="org-page-subtitle">Discover and connect with student-led groups, academic departments, and communities across the campus.</p>
+        </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="org-filter-tabs">
+        <button class="org-filter-tab active">All Groups</button>
+        <button class="org-filter-tab">Student Orgs</button>
+        <button class="org-filter-tab">Departments</button>
+        <button class="org-filter-tab">Greek Life</button>
+        <button class="org-filter-tab">Sports &amp; Rec</button>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary btn-sm org-add-btn">+ Add Organization</a>
+        {% endif %}
+>>>>>>> origin/kanan
     </div>
 
     {% if organizations %}
     <div class="org-grid">
         {% for org in organizations %}
         <div class="org-card">
+<<<<<<< HEAD
             <div class="org-banner">
                 {% if org.picture %}
                     <img src="{{ url_for('static', filename='uploads/' + org.picture) }}" alt="{{ org.name }}" class="org-logo">
@@ -45,17 +68,91 @@
                 <div class="org-footer">
                     <span class="org-since">Since {{ org.created_at.strftime('%b %Y') }}</span>
                 </div>
+=======
+
+            <!-- Banner / Image -->
+            <div class="org-banner">
+                {% if org.picture %}
+                    <img src="{{ url_for('static', filename='uploads/' + org.picture) }}"
+                         alt="{{ org.name }}" class="org-banner-img">
+                {% else %}
+                    <div class="org-banner-placeholder"></div>
+                {% endif %}
+                <!-- Icon badge -->
+                <div class="org-icon-badge">
+                    <span>&#127970;</span>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="org-body">
+                <h3 class="org-name">{{ org.name }}</h3>
+
+                {% if org.description %}
+                <p class="org-desc">
+                    {{ org.description[:130] }}{% if org.description|length > 130 %}…{% endif %}
+                </p>
+                {% endif %}
+
+                <div class="org-divider"></div>
+
+                <!-- View events link -->
+                <a href="{{ url_for('organization.view_organization', id=org.id) }}" class="org-view-link">
+                    View upcoming events &rarr;
+                </a>
+
+                <!-- Admin: Edit / Delete -->
+                {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                <div class="org-admin-actions">
+                    <a href="{{ url_for('organization.update_organization_form', id=org.id) }}"
+                       class="btn-sm btn-secondary">Edit</a>
+                    <form action="{{ url_for('organization.delete_organization', id=org.id) }}"
+                          method="POST" class="inline-form">
+                        <button type="submit" class="btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+>>>>>>> origin/kanan
             </div>
         </div>
         {% endfor %}
     </div>
+<<<<<<< HEAD
+=======
+
+    <!-- Pagination (static görünüş) -->
+    <div class="org-pagination">
+        <button class="pag-btn pag-arrow" disabled>&#8592;</button>
+        <button class="pag-btn active">1</button>
+        <button class="pag-btn">2</button>
+        <button class="pag-btn">3</button>
+        <span class="pag-dots">...</span>
+        <button class="pag-btn">12</button>
+        <button class="pag-btn pag-arrow">&#8594;</button>
+    </div>
+
+>>>>>>> origin/kanan
     {% else %}
     <div class="empty-state">
         <div class="empty-icon">&#127970;</div>
         <h3>No organizations yet</h3>
+<<<<<<< HEAD
         <p>Register the first campus organization.</p>
         <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary">Register Organization</a>
     </div>
     {% endif %}
 </div>
 {% endblock %}
+=======
+        <p>Check back soon for campus organizations.</p>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary">
+            + Add Organization
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+>>>>>>> origin/kanan
