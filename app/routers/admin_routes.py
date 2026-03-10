@@ -39,7 +39,8 @@ def list_users():
 
 @admin_bp.get('/users/create')
 def create_user_form():
-    return render_template('admin/users/create.html')
+    organizations = organization_repository.get_all_ordered_by_name()
+    return render_template('admin/users/create.html', organizations=organizations)
 
 
 @admin_bp.post('/users/create')
@@ -49,6 +50,7 @@ def create_user():
         email=request.form.get('email'),
         password=request.form.get('password'),
         role=request.form.get('role', 'user'),
+        organization_id=request.form.get('organization_id') or None,
     )
     if error:
         flash(error, 'danger')
@@ -63,7 +65,8 @@ def edit_user_form(id):
     if not user:
         flash('User not found.', 'danger')
         return redirect(url_for('admin.list_users'))
-    return render_template('admin/users/edit.html', user=user)
+    organizations = organization_repository.get_all_ordered_by_name()
+    return render_template('admin/users/edit.html', user=user, organizations=organizations)
 
 
 @admin_bp.post('/users/<int:id>/edit')
@@ -74,6 +77,7 @@ def edit_user(id):
         email=request.form.get('email'),
         role=request.form.get('role', 'user'),
         password=request.form.get('password') or None,
+        organization_id=request.form.get('organization_id') or None,
     )
     if error:
         flash(error, 'danger')

@@ -13,9 +13,14 @@
             <h1>Discover Events</h1>
             <p class="page-subtitle">Join the most exciting activities across campus this week.</p>
         </div>
-        <div class="events-search-wrap">
-            <span class="search-icon">&#128269;</span>
-            <input type="text" id="eventSearch" placeholder="Search events, clubs, or rooms..." class="events-search-input">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            {% if current_user.is_authenticated and (current_user.role == 'organization' or current_user.role == 'admin') %}
+            <a href="{{ url_for('event.create_event_form') }}" class="btn-primary" style="white-space:nowrap;">+ New Event</a>
+            {% endif %}
+            <div class="events-search-wrap">
+                <span class="search-icon">&#128269;</span>
+                <input type="text" id="eventSearch" placeholder="Search events, clubs, or rooms..." class="events-search-input">
+            </div>
         </div>
     </div>
 
@@ -83,7 +88,9 @@
              data-organizer="{{ (event.organizer.name if event.organizer else 'Unknown') | e }}"
              data-capacity="{{ event.capacity or '' }}"
              data-picture="{{ 'uploads/' + event.picture if event.picture else '' }}"
-             data-private="{{ 'true' if event.private else 'false' }}">
+             data-private="{{ 'true' if event.private else 'false' }}"
+             data-org-id="{{ event.organization_id or '' }}"
+             data-register="{{ event.for_registration or '' }}">
 
             <div class="event-image-wrap" onclick="openModalFromCard(this.closest('.event-card'))">
                 {% if event.picture %}
@@ -141,9 +148,9 @@
                     {% endif %}
                 </div>
 
-                <!-- card-actions: admin → Edit/Delete, user → Register Now -->
+                <!-- card-actions: admin/org-owner → Edit/Delete, others → Register Now -->
                 <div class="card-actions">
-                    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                    {% if current_user.is_authenticated and (current_user.role == 'admin' or (current_user.role == 'organization' and current_user.organization_id and current_user.organization_id == event.organization_id)) %}
                         <a href="{{ url_for('event.update_event_form', id=event.id) }}"
                            class="btn-sm btn-secondary">Edit</a>
                         <form action="{{ url_for('event.delete_event', id=event.id) }}"
@@ -209,16 +216,18 @@
                 </div>
 
                 {% if current_user.is_authenticated %}
-                    {% if current_user.role == 'admin' %}
+                    {% if current_user.role == 'admin' or current_user.role == 'organization' %}
                         <a href="#" class="btn-modal-register btn-modal-admin"
-                           id="modalEditBtn">&#9998; Edit Event</a>
-                    {% else %}
-                        <form method="POST" id="modalRegisterForm">
-                            <button type="submit" class="btn-modal-register">
-                                &#128279; Register Now
-                            </button>
-                        </form>
+                           id="modalEditBtn" style="display:none;">&#9998; Edit Event</a>
                     {% endif %}
+                    <a href="#" class="btn-modal-register" id="modalRegisterBtn"
+                       target="_blank" style="display:none;">
+                        &#128279; Register Now
+                    </a>
+                    <p class="modal-no-link" id="modalNoLink" style="display:none;
+                       font-size:0.85rem; color:var(--text-secondary); text-align:center;">
+                        No registration link available.
+                    </p>
                 {% else %}
                     <a href="{{ url_for('user.login_form') }}" class="btn-modal-register">
                         &#128274; Log in to Register
@@ -230,6 +239,9 @@
 </div>
 
 <script>
+var currentUserRole = '{{ current_user.role if current_user.is_authenticated else "" }}';
+var currentUserOrgId = '{{ current_user.organization_id if current_user.is_authenticated and current_user.organization_id else "" }}';
+
 function openModalFromCard(card) {
     var name      = card.getAttribute('data-name');
     var desc      = card.getAttribute('data-desc');
@@ -262,15 +274,27 @@ function openModalFromCard(card) {
         imgWrap.innerHTML = '<div class="modal-image-placeholder">&#128197;</div>';
     }
 
-    // Register form action
-    var regForm = document.getElementById('modalRegisterForm');
-    if (regForm) {
-        regForm.action = '/events/' + id + '/register';
+    // Register link
+    var regBtn = document.getElementById('modalRegisterBtn');
+    var noLink = document.getElementById('modalNoLink');
+    var registerUrl = card.getAttribute('data-register');
+    if (regBtn) {
+        if (registerUrl) {
+            regBtn.href = registerUrl;
+            regBtn.style.display = '';
+            if (noLink) noLink.style.display = 'none';
+        } else {
+            regBtn.style.display = 'none';
+            if (noLink) noLink.style.display = '';
+        }
     }
 
-    // Admin: edit button link
+    // Admin/Org-owner: edit button link
     var editBtn = document.getElementById('modalEditBtn');
     if (editBtn) {
+        var eventOrgId = card.getAttribute('data-org-id');
+        var canEdit = currentUserRole === 'admin' || (currentUserRole === 'organization' && currentUserOrgId && currentUserOrgId === eventOrgId);
+        editBtn.style.display = canEdit ? '' : 'none';
         editBtn.href = '/events/' + id + '/edit';
     }
 

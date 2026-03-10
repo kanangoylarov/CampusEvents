@@ -4,22 +4,23 @@ from flask_login import login_required, current_user
 from app.services import event_service
 from app.repositories import organization_repository, room_repository, event_repository
 
+
+def _check_org_ownership(event):
+    """Return True if current user is organization and does NOT own this event."""
+    if current_user.role != 'organization':
+        return False
+    if not event:
+        flash('Event not found.', 'danger')
+        return True
+    user_org = current_user.organization_id
+    event_org = event.organization_id
+    # both must exist and match (cast to int to avoid str/int mismatch)
+    if user_org and event_org and int(user_org) == int(event_org):
+        return False
+    flash('You can only modify your own organization\'s events.', 'danger')
+    return True
+
 event_bp = Blueprint('event', __name__)
-
-
-def admin_required(f):
-    """Yalnız admin keçə bilər."""
-    from functools import wraps
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not current_user.is_authenticated:
-            flash('Please log in first.', 'danger')
-            return redirect(url_for('user.login_form'))
-        if current_user.role != 'admin':
-            flash('You do not have permission to do this.', 'danger')
-            return redirect(url_for('event.list_events'))
-        return f(*args, **kwargs)
-    return decorated
 
 
 @event_bp.get('/events')
@@ -43,9 +44,8 @@ def list_events():
     )
 
 
-# ── Yalnız admin ──────────────────────────────────────────
+# ── admin + organization (RBAC in __init__.py) ───────────
 @event_bp.get('/events/create')
-@admin_required
 def create_event_form():
     organizations = organization_repository.get_all_ordered_by_name()
     rooms = room_repository.get_all_ordered_by_name()
@@ -54,10 +54,12 @@ def create_event_form():
 
 
 @event_bp.post('/events/create')
-@admin_required
 def create_event():
+    form_data = request.form.to_dict()
+    if current_user.role == 'organization' and current_user.organization_id:
+        form_data['organization_id'] = str(current_user.organization_id)
     event, error = event_service.create_event(
-        request.form, request.files.get('picture'))
+        form_data, request.files.get('picture'))
     if error:
         flash(error, 'danger')
         organizations = organization_repository.get_all_ordered_by_name()
@@ -69,9 +71,10 @@ def create_event():
 
 
 @event_bp.get('/events/<int:id>/edit')
-@admin_required
 def update_event_form(id):
     event = event_repository.get_by_id(id)
+    if _check_org_ownership(event):
+        return redirect(url_for('event.list_events'))
     organizations = organization_repository.get_all_ordered_by_name()
     rooms = room_repository.get_all_ordered_by_name()
     return render_template('events/edit.html', event=event,
@@ -79,10 +82,15 @@ def update_event_form(id):
 
 
 @event_bp.post('/events/<int:id>/edit')
-@admin_required
 def update_event(id):
+    event = event_repository.get_by_id(id)
+    if _check_org_ownership(event):
+        return redirect(url_for('event.list_events'))
+    form_data = request.form.to_dict()
+    if current_user.role == 'organization' and current_user.organization_id:
+        form_data['organization_id'] = str(current_user.organization_id)
     event, error = event_service.update_event(
-        id, request.form, request.files.get('picture'))
+        id, form_data, request.files.get('picture'))
     if error:
         flash(error, 'danger')
         organizations = organization_repository.get_all_ordered_by_name()
@@ -94,8 +102,10 @@ def update_event(id):
 
 
 @event_bp.post('/events/<int:id>/delete')
-@admin_required
 def delete_event(id):
+    event = event_repository.get_by_id(id)
+    if _check_org_ownership(event):
+        return redirect(url_for('event.list_events'))
     event_service.delete_event(id)
     flash('Event deleted successfully!', 'success')
     return redirect(url_for('event.list_events'))
