@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response
 from flask_login import login_user, logout_user, login_required
 
 from app.services import user_service
+from app.jwt_utils import generate_token
 
 user_bp = Blueprint('user', __name__)
 
@@ -39,8 +40,11 @@ def login():
     )
     if user:
         login_user(user)
+        token = generate_token(user.id)
+        response = make_response(redirect(url_for('main.index')))
+        response.set_cookie('jwt_token', token, httponly=True, samesite='Lax')
         flash(f'Welcome back, {user.full_name}!', 'success')
-        return redirect(url_for('main.index'))
+        return response
     flash('Invalid email or password.')
     return redirect(url_for('user.login_form'))
 
@@ -49,5 +53,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    response = make_response(redirect(url_for('user.login_form')))
+    response.delete_cookie('jwt_token')
     flash('You have been logged out.', 'success')
-    return redirect(url_for('user.login_form'))
+    return response

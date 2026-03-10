@@ -24,6 +24,7 @@
                     <label>Role <span class="required">*</span></label>
                     <select name="role">
                         <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                        <option value="organization" {% if user.role == 'organization' %}selected{% endif %}>Organization</option>
                         <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
                     </select>
                 </div>

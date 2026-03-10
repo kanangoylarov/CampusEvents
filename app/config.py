@@ -4,6 +4,8 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-dev-key-change-in-production')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', SECRET_KEY)
+    JWT_EXPIRATION_HOURS = int(os.environ.get('JWT_EXPIRATION_HOURS', 24))
 
 
 class DevelopmentConfig(Config):
