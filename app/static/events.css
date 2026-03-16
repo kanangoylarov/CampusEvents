@@ -1,13 +1,4 @@
 /* ============================================================
-<<<<<<< HEAD
-   EVENTS.CSS — Events list and create form
-   ============================================================ */
-
-/* --- Events grid --- */
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-=======
    EVENTS.CSS — Events list page
    ============================================================ */
 
@@ -81,7 +72,6 @@
 .events-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
->>>>>>> origin/kanan
     gap: 1.5rem;
 }
 
@@ -107,10 +97,7 @@
     height: 180px;
     background: var(--bg-subtle);
     overflow: hidden;
-<<<<<<< HEAD
-=======
     cursor: pointer;
->>>>>>> origin/kanan
 }
 .event-image {
     width: 100%;
@@ -128,10 +115,6 @@
     justify-content: center;
     font-size: 3.5rem;
     background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-50) 100%);
-<<<<<<< HEAD
-    opacity: 0.8;
-=======
->>>>>>> origin/kanan
 }
 
 /* --- Privacy badge --- */
@@ -156,39 +139,26 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-<<<<<<< HEAD
-    gap: 0.6rem;
-}
-=======
     gap: 0.5rem;
 }
 
->>>>>>> origin/kanan
 .event-name {
     font-size: 1rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.3;
-<<<<<<< HEAD
-}
-=======
     cursor: pointer;
     transition: color var(--transition-fast);
 }
 .event-name:hover { color: var(--primary); }
 
->>>>>>> origin/kanan
 .event-desc {
     font-size: 0.85rem;
     color: var(--text-secondary);
     line-height: 1.55;
 }
 
-<<<<<<< HEAD
-/* --- Event meta items --- */
-=======
 /* --- Event meta --- */
->>>>>>> origin/kanan
 .event-meta {
     display: flex;
     flex-direction: column;
@@ -204,9 +174,6 @@
 }
 .meta-icon { font-size: 0.85rem; flex-shrink: 0; }
 
-<<<<<<< HEAD
-/* --- Filter panel --- */
-=======
 /* --- Register Now button (task #8) --- */
 .btn-register-now {
     display: block;
@@ -240,7 +207,6 @@
 }
 
 /* --- Filter panel (advanced) --- */
->>>>>>> origin/kanan
 .filter-panel {
     background: var(--bg-surface);
     border: 1px solid var(--border);
@@ -274,27 +240,11 @@
     appearance: none;
     transition: all var(--transition-fast);
 }
-<<<<<<< HEAD
-.filter-input:hover {
-    border-color: var(--border-hover);
-}
-.filter-input:focus {
-    border-color: var(--border-focus);
-    box-shadow: var(--shadow-focus);
-    background: var(--bg-surface);
-}
-.filter-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-=======
 .filter-input:focus {
     border-color: var(--border-focus);
     box-shadow: var(--shadow-focus);
 }
 .filter-actions { display: flex; align-items: center; gap: 0.75rem; }
->>>>>>> origin/kanan
 .btn-filter-apply {
     background: var(--primary);
     color: #fff;
@@ -307,19 +257,9 @@
     cursor: pointer;
     transition: all var(--transition-fast);
 }
-<<<<<<< HEAD
-.btn-filter-apply:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-}
-.btn-filter-clear {
-    font-size: 0.85rem;
-    font-weight: 500;
-=======
 .btn-filter-apply:hover { background: var(--primary-dark); }
 .btn-filter-clear {
     font-size: 0.85rem;
->>>>>>> origin/kanan
     color: var(--text-secondary);
     text-decoration: none;
     padding: 0.45rem 0.85rem;
@@ -327,10 +267,6 @@
     border: 1px solid var(--border);
     background: var(--bg-surface);
     transition: all var(--transition-fast);
-<<<<<<< HEAD
-    white-space: nowrap;
-=======
->>>>>>> origin/kanan
 }
 .btn-filter-clear:hover {
     color: var(--danger);
@@ -339,42 +275,6 @@
     text-decoration: none;
 }
 
-<<<<<<< HEAD
-/* --- Active filter indicator --- */
-.filter-active-label {
-    color: var(--primary);
-    font-weight: 600;
-}
-.filter-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-}
-.chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    font-size: 0.78rem;
-    font-weight: 500;
-    padding: 0.3rem 0.75rem;
-    border-radius: var(--radius-full);
-    border: 1px solid var(--primary-50);
-}
-
-/* --- Capacity pill --- */
-.event-capacity { margin-top: auto; padding-top: 0.5rem; }
-.capacity-pill {
-    display: inline-block;
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.2rem 0.65rem;
-    border-radius: var(--radius-full);
-=======
 /* ============================================================
    EVENT DETAIL MODAL (task #9)
    ============================================================ */
@@ -562,19 +462,12 @@
     text-decoration: none;
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(61, 31, 140, 0.3);
->>>>>>> origin/kanan
 }
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
     .events-grid { grid-template-columns: 1fr; }
     .filter-grid { grid-template-columns: 1fr 1fr; }
-<<<<<<< HEAD
-}
-@media (max-width: 480px) {
-    .filter-grid { grid-template-columns: 1fr; }
-}
-=======
     .modal-content { grid-template-columns: 1fr; }
     .modal-image-wrap { height: 200px; }
 }
@@ -582,4 +475,3 @@
     .filter-grid { grid-template-columns: 1fr; }
     .filter-tabs { gap: 0.35rem; }
 }
->>>>>>> origin/kanan

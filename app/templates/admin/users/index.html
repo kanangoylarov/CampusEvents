@@ -31,13 +31,26 @@
                     </div>
                 </td>
                 <td>{{ user.email }}</td>
-                <td><span class="badge badge-{{ 'purple' if user.role == 'admin' else 'gray' }}">{{ user.role }}</span></td>
+                <td>
+                    <span class="badge badge-{{ 'purple' if user.role == 'admin' else ('blue' if user.role == 'organization' else 'gray') }}">
+                        {{ user.role }}
+                    </span>
+                </td>
                 <td>{{ user.created_at.strftime('%b %d, %Y') if user.created_at else '-' }}</td>
                 <td>
                     <div class="table-actions">
+                        {% if user.id != current_user.id %}
+                        <form method="POST" action="{{ url_for('admin.set_user_role', id=user.id) }}" class="inline-form">
+                            <select name="role" onchange="this.form.submit()" class="role-select-inline" title="Change role">
+                                <option value="user"         {% if user.role == 'user' %}selected{% endif %}>User</option>
+                                <option value="organization" {% if user.role == 'organization' %}selected{% endif %}>Organizer</option>
+                                <option value="admin"        {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                            </select>
+                        </form>
+                        {% endif %}
                         <a href="{{ url_for('admin.edit_user_form', id=user.id) }}" class="btn-secondary btn-sm">Edit</a>
                         {% if user.id != current_user.id %}
-                        <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                        <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}" class="inline-form" onsubmit="return confirm('Delete this user?')">
                             <button type="submit" class="btn-danger btn-sm">Delete</button>
                         </form>
                         {% endif %}

@@ -1,31 +1,4 @@
 /* ============================================================
-<<<<<<< HEAD
-   MAIN.CSS — Home page (hero + feature cards)
-   ============================================================ */
-
-/* --- Hero Section --- */
-.hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 5rem 1.5rem 4rem;
-    gap: 3rem;
-}
-
-.hero-content {
-    flex: 1;
-    max-width: 560px;
-}
-
-.hero-title {
-    font-size: 3rem;
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.04em;
-    color: var(--text-primary);
-=======
    MAIN.CSS — Home page
    ============================================================ */
 
@@ -64,17 +37,10 @@
     line-height: 1.1;
     letter-spacing: -0.04em;
     color: #ffffff;
->>>>>>> origin/kanan
     margin-bottom: 1.25rem;
 }
 
 .hero-subtitle {
-<<<<<<< HEAD
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 2rem;
-=======
     font-size: 1.05rem;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.7;
@@ -82,41 +48,18 @@
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
->>>>>>> origin/kanan
 }
 
 .hero-actions {
     display: flex;
     gap: 1rem;
-<<<<<<< HEAD
-=======
     justify-content: center;
->>>>>>> origin/kanan
     flex-wrap: wrap;
 }
 
 .btn-hero-primary {
     display: inline-flex;
     align-items: center;
-<<<<<<< HEAD
-    gap: 0.4rem;
-    background: var(--primary);
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.85rem 1.75rem;
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    transition: all var(--transition);
-    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
-}
-.btn-hero-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
-    color: #fff;
-    text-decoration: none;
-=======
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(8px);
     color: #fff;
@@ -133,21 +76,11 @@
     color: #fff;
     text-decoration: none;
     transform: translateY(-2px);
->>>>>>> origin/kanan
 }
 
 .btn-hero-outline {
     display: inline-flex;
     align-items: center;
-<<<<<<< HEAD
-    background: transparent;
-    color: var(--primary);
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.85rem 1.75rem;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--primary);
-=======
     background: rgba(255, 255, 255, 0.08);
     color: rgba(255,255,255,0.85);
     font-size: 0.95rem;
@@ -155,31 +88,10 @@
     padding: 0.85rem 2rem;
     border-radius: var(--radius-sm);
     border: 1px solid rgba(255,255,255,0.2);
->>>>>>> origin/kanan
     text-decoration: none;
     transition: all var(--transition);
 }
 .btn-hero-outline:hover {
-<<<<<<< HEAD
-    background: var(--primary-light);
-    transform: translateY(-2px);
-    text-decoration: none;
-    color: var(--primary);
-}
-
-.hero-illustration {
-    font-size: 8rem;
-    opacity: 0.1;
-    flex-shrink: 0;
-    user-select: none;
-}
-
-/* --- Features Section --- */
-.features {
-    background: var(--bg-subtle);
-    border-top: 1px solid var(--border);
-    padding: 4rem 1.5rem;
-=======
     background: rgba(255,255,255,0.15);
     color: #fff;
     text-decoration: none;
@@ -205,20 +117,13 @@
     font-size: 0.9rem;
     color: var(--text-secondary);
     margin-bottom: 2.5rem;
->>>>>>> origin/kanan
 }
 
 .features-grid {
     display: grid;
-<<<<<<< HEAD
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    max-width: 1200px;
-=======
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.25rem;
     max-width: 1000px;
->>>>>>> origin/kanan
     margin: 0 auto;
 }
 
@@ -227,39 +132,6 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 2rem 1.75rem;
-<<<<<<< HEAD
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-.feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), #8b5cf6);
-    opacity: 0;
-    transition: opacity var(--transition);
-}
-.feature-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
-    border-color: transparent;
-}
-.feature-card:hover::before { opacity: 1; }
-
-.feature-icon {
-    font-size: 2.25rem;
-    margin-bottom: 1rem;
-}
-
-.feature-card h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin-bottom: 0.6rem;
-=======
     text-align: left;
     transition: all var(--transition);
 }
@@ -285,7 +157,6 @@
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
->>>>>>> origin/kanan
     color: var(--text-primary);
 }
 
@@ -293,25 +164,6 @@
     font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.65;
-<<<<<<< HEAD
-    margin-bottom: 1.25rem;
-}
-
-.feature-link {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--primary);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-.feature-link:hover {
-    color: var(--primary-dark);
-    text-decoration: none;
-    gap: 0.5rem;
-=======
 }
 
 /* --- Upcoming Highlights --- */
@@ -437,25 +289,12 @@
     gap: 0.4rem;
     font-size: 0.8rem;
     color: var(--text-secondary);
->>>>>>> origin/kanan
 }
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-<<<<<<< HEAD
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        padding: 3rem 1.5rem 2rem;
-    }
-    .hero-actions { justify-content: center; }
-    .hero-title { font-size: 2.25rem; }
-    .hero-illustration { display: none; }
-}
-=======
     .hero { margin: 0; border-radius: 0; padding: 3rem 1.5rem; }
     .hero-title { font-size: 2.25rem; }
     .upcoming-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
     .upcoming-grid { grid-template-columns: 1fr; }
 }
->>>>>>> origin/kanan

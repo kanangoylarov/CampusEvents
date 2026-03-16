@@ -71,6 +71,12 @@ def create_event(form_data, picture_file):
     start_time = parse_time(form_data.get('start_time'))
     end_time = parse_time(form_data.get('end_time'))
 
+    name = (form_data.get('name') or '').strip()
+    if not name:
+        return None, 'Event name is required.'
+    if not event_date:
+        return None, 'Event date is required.'
+
     if room_id and event_date:
         conflict, blocking = check_room_conflict(room_id, event_date, start_time, end_time)
         if conflict:
@@ -78,10 +84,10 @@ def create_event(form_data, picture_file):
 
     saved_filename = save_uploaded_image(picture_file)
     event = Event(
-        name=form_data.get('name'),
+        name=name,
         description=form_data.get('description'),
         picture=saved_filename,
-        private=form_data.get('private') == 'on',
+        private=bool(form_data.get('private')),
         date=event_date,
         for_registration=form_data.get('for_registration'),
         start_time=start_time,
@@ -113,9 +119,9 @@ def update_event(event_id, form_data, picture_file):
         delete_uploaded_image(event.picture)
         event.picture = saved_filename
 
-    event.name = form_data.get('name')
+    event.name = (form_data.get('name') or '').strip() or event.name
     event.description = form_data.get('description')
-    event.private = form_data.get('private') == 'on'
+    event.private = bool(form_data.get('private'))
     event.date = event_date
     event.for_registration = form_data.get('for_registration')
     event.start_time = start_time

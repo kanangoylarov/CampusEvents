@@ -17,20 +17,19 @@ def check_admin():
         return redirect(url_for('user.login_form'))
 
 
-# ── Dashboard ─────────────────────────────────────────────
 @admin_bp.get('/')
 def dashboard():
+    all_users = user_repository.get_all()
     stats = {
-        'users': len(user_repository.get_all()),
+        'users': len(all_users),
         'events': len(event_repository.get_all()),
         'organizations': len(organization_repository.get_all_ordered_by_name()),
         'rooms': len(room_repository.get_all_ordered_by_name()),
     }
-    recent_users = user_repository.get_all()[:5]
+    recent_users = all_users[:5]
     return render_template('admin/dashboard.html', stats=stats, recent_users=recent_users)
 
 
-# ── Users ─────────────────────────────────────────────────
 @admin_bp.get('/users')
 def list_users():
     users = user_service.list_users()
@@ -96,10 +95,35 @@ def delete_user(id):
     return redirect(url_for('admin.list_users'))
 
 
-# ── Events ────────────────────────────────────────────────
+@admin_bp.post('/users/<int:id>/set-role')
+def set_user_role(id):
+    if current_user.id == id:
+        flash('You cannot change your own role.', 'danger')
+        return redirect(url_for('admin.list_users'))
+    role = request.form.get('role')
+    if role not in ('user', 'organization', 'admin'):
+        flash('Invalid role.', 'danger')
+        return redirect(url_for('admin.list_users'))
+    target = user_service.get_user(id)
+    if not target:
+        flash('User not found.', 'danger')
+        return redirect(url_for('admin.list_users'))
+    organization_id = request.form.get('organization_id') or target.organization_id
+    user_service.update_user(
+        user_id=id,
+        full_name=target.full_name,
+        email=target.email,
+        role=role,
+        password=None,
+        organization_id=organization_id,
+    )
+    flash(f'Permission updated — {target.full_name} is now "{role}".', 'success')
+    return redirect(url_for('admin.list_users'))
+
+
 @admin_bp.get('/events')
 def list_events():
-    events = event_service.list_events({})
+    events = event_repository.get_all()
     return render_template('admin/events/index.html', events=events)
 
 
@@ -152,7 +176,6 @@ def delete_event(id):
     return redirect(url_for('admin.list_events'))
 
 
-# ── Organizations ─────────────────────────────────────────
 @admin_bp.get('/organizations')
 def list_organizations():
     organizations = organization_service.list_organizations()
@@ -203,7 +226,6 @@ def delete_organization(id):
     return redirect(url_for('admin.list_organizations'))
 
 
-# ── Rooms ─────────────────────────────────────────────────
 @admin_bp.get('/rooms')
 def list_rooms():
     rooms = room_service.list_rooms()

@@ -5,56 +5,14 @@
 {% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
-<div class="auth-wrapper">
-    <div class="auth-card">
-        <div class="auth-header">
-            <div class="auth-avatar">&#128100;</div>
-            <h2>Create Account</h2>
-            <p>Join the campus community today</p>
-        </div>
-
-        <form action="{{ url_for('user.register') }}" method="POST" class="auth-form">
-            <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name" placeholder="John Doe" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="john@campus.edu" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Min. 8 characters" required>
-            </div>
-            <div class="form-group">
-                <label for="role">Account Type</label>
-                <select id="role" name="role">
-                    <option value="user">Student / Staff</option>
-                    <option value="admin">Administrator</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-auth">Create Account</button>
-        </form>
-
-        <div class="auth-footer">
-            Already have an account? <a href="{{ url_for('user.login_form') }}">Log in</a>
-        </div>
-    </div>
-</div>
-{% endblock %}
-=======
 <div class="auth-wrapper register-wrapper">
     <div class="register-split">
-        <!-- Sol panel - purple -->
         <div class="register-left">
             <div class="register-left-content">
                 <h2>Be part of the campus pulse.</h2>
                 <p>Discover workshops, social mixers, and study groups happening right now at your university.</p>
             </div>
         </div>
-
-        <!-- Sağ panel - form -->
         <div class="register-right">
             <h2 class="register-title">Create Account</h2>
             <p class="register-subtitle">Join your campus community today</p>
@@ -67,7 +25,6 @@
                         <input type="text" id="full_name" name="full_name" placeholder="Alex Johnson" required>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="email">University Email</label>
                     <div class="input-icon-wrap">
@@ -75,17 +32,13 @@
                         <input type="email" id="email" name="email" placeholder="alex@university.edu" required>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Password <small>(min. 6 characters)</small></label>
                     <div class="input-icon-wrap">
                         <span class="input-icon">&#128274;</span>
-                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                        <input type="password" id="password" name="password" placeholder="••••••••" minlength="6" required>
                     </div>
                 </div>
-
-                <!-- Account type silinib - task #4 -->
-
                 <button type="submit" class="btn-auth">Register &rarr;</button>
             </form>
 
@@ -96,4 +49,3 @@
     </div>
 </div>
 {% endblock %}
->>>>>>> origin/kanan

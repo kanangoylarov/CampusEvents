@@ -325,6 +325,20 @@
     max-width: 250px;
 }
 
+.role-select-inline {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-subtle);
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+.role-select-inline:focus { border-color: var(--border-focus); }
+
 .table-actions {
     display: flex;
     gap: 0.4rem;
@@ -349,6 +363,7 @@
     letter-spacing: 0.04em;
 }
 .badge-purple { background: #ede9f8; color: var(--primary); }
+.badge-blue   { background: #dbeafe; color: #1d4ed8; }
 .badge-gray   { background: var(--bg-subtle); color: var(--text-secondary); }
 .badge-green  { background: #d1fae5; color: #065f46; }
 .badge-orange { background: #fef3c7; color: #92400e; }

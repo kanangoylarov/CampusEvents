@@ -27,7 +27,9 @@
                 <span class="meta-item">{{ org.events|length }} event{{ 's' if org.events|length != 1 }}</span>
             </div>
             <div class="org-detail-actions">
+                {% if current_user.is_authenticated and current_user.role == 'admin' %}
                 <a href="{{ url_for('organization.update_organization_form', id=org.id) }}" class="btn-sm btn-secondary">Edit</a>
+                {% endif %}
                 <a href="{{ url_for('organization.list_organizations') }}" class="btn-sm btn-secondary">Back to Organizations</a>
             </div>
         </div>
@@ -82,12 +84,14 @@
                         <span class="capacity-pill">&#128101; {{ event.capacity }} seats</span>
                     </div>
                     {% endif %}
+                    {% if current_user.is_authenticated and (current_user.role == 'admin' or (current_user.role == 'organization' and current_user.organization_id == event.organization_id)) %}
                     <div class="card-actions">
                         <a href="{{ url_for('event.update_event_form', id=event.id) }}" class="btn-sm btn-secondary">Edit</a>
                         <form action="{{ url_for('event.delete_event', id=event.id) }}" method="POST" class="inline-form">
                             <button type="submit" class="btn-sm btn-danger">Delete</button>
                         </form>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -97,7 +101,9 @@
             <div class="empty-icon">&#128197;</div>
             <h3>No events yet</h3>
             <p>This organization hasn't created any events.</p>
+            {% if current_user.is_authenticated and current_user.role in ('admin', 'organization') %}
             <a href="{{ url_for('event.create_event_form') }}" class="btn-primary">Create Event</a>
+            {% endif %}
         </div>
         {% endif %}
     </div>

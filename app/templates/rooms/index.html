@@ -11,7 +11,9 @@
             <h1>Campus Rooms</h1>
             <p class="page-subtitle">{{ rooms|length }} room{{ 's' if rooms|length != 1 }}</p>
         </div>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
         <a href="{{ url_for('room.create_room_form') }}" class="btn-primary">+ Add Room</a>
+        {% endif %}
     </div>
 
     {% if rooms %}
@@ -61,12 +63,14 @@
                 </div>
                 {% endif %}
 
+                {% if current_user.is_authenticated and current_user.role == 'admin' %}
                 <div class="card-actions">
                     <a href="{{ url_for('room.update_room_form', id=room.id) }}" class="btn-sm btn-secondary">Edit</a>
                     <form action="{{ url_for('room.delete_room', id=room.id) }}" method="POST" class="inline-form">
                         <button type="submit" class="btn-sm btn-danger">Delete</button>
                     </form>
                 </div>
+                {% endif %}
                 <div class="room-footer">
                     <span class="room-id">Room #{{ room.id }}</span>
                     <span class="room-added">Added {{ room.created_at.strftime('%b %d, %Y') }}</span>
@@ -80,7 +84,9 @@
         <div class="empty-icon">&#128205;</div>
         <h3>No rooms added yet</h3>
         <p>Add campus rooms to start assigning events.</p>
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
         <a href="{{ url_for('room.create_room_form') }}" class="btn-primary">Add Room</a>
+        {% endif %}
     </div>
     {% endif %}
 </div>

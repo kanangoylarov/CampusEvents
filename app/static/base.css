@@ -4,19 +4,11 @@
 
 /* --- Design Tokens --- */
 :root {
-<<<<<<< HEAD
-    --primary:        #6366f1;
-    --primary-dark:   #4f46e5;
-    --primary-darker: #4338ca;
-    --primary-light:  #eef2ff;
-    --primary-50:     #e0e7ff;
-=======
     --primary:        #3d1f8c;
     --primary-dark:   #2d1669;
     --primary-darker: #1e0e46;
     --primary-light:  #ede9f8;
     --primary-50:     #d9d0f5;
->>>>>>> origin/kanan
 
     --success:        #10b981;
     --success-light:  #d1fae5;
@@ -29,16 +21,6 @@
     --text-secondary: #64748b;
     --text-muted:     #94a3b8;
 
-<<<<<<< HEAD
-    --bg-page:        #f8fafc;
-    --bg-surface:     #ffffff;
-    --bg-subtle:      #f1f5f9;
-    --bg-hover:       #f8fafc;
-
-    --border:         #e2e8f0;
-    --border-hover:   #cbd5e1;
-    --border-focus:   #6366f1;
-=======
     --bg-page:        #f0eef8;
     --bg-surface:     #ffffff;
     --bg-subtle:      #e8e4f4;
@@ -47,7 +29,6 @@
     --border:         #e2e0ee;
     --border-hover:   #c4bfe0;
     --border-focus:   #3d1f8c;
->>>>>>> origin/kanan
 
     --radius-sm:      8px;
     --radius-md:      12px;
@@ -55,46 +36,29 @@
     --radius-xl:      24px;
     --radius-full:    9999px;
 
-<<<<<<< HEAD
-    --shadow-xs:      0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md:      0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    --shadow-lg:      0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-    --shadow-xl:      0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    --shadow-focus:   0 0 0 3px rgba(99, 102, 241, 0.15);
-=======
     --shadow-xs:      0 1px 2px rgba(61, 31, 140, 0.05);
     --shadow-sm:      0 1px 3px rgba(61, 31, 140, 0.08), 0 1px 2px rgba(61, 31, 140, 0.04);
     --shadow-md:      0 4px 6px -1px rgba(61, 31, 140, 0.07), 0 2px 4px -2px rgba(61, 31, 140, 0.05);
     --shadow-lg:      0 10px 15px -3px rgba(61, 31, 140, 0.1), 0 4px 6px -4px rgba(61, 31, 140, 0.05);
     --shadow-xl:      0 20px 25px -5px rgba(61, 31, 140, 0.1), 0 8px 10px -6px rgba(61, 31, 140, 0.05);
     --shadow-focus:   0 0 0 3px rgba(61, 31, 140, 0.15);
->>>>>>> origin/kanan
 
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition:      200ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 
-<<<<<<< HEAD
-    --font:           'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-=======
     --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
->>>>>>> origin/kanan
 }
 
 /* --- Reset --- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<<<<<<< HEAD
-html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-=======
 html {
     scroll-behavior: smooth;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
->>>>>>> origin/kanan
 
 body {
     font-family: var(--font);
@@ -112,11 +76,7 @@ a:hover { color: var(--primary-dark); }
 
 /* --- Navigation --- */
 .navbar {
-<<<<<<< HEAD
-    background: rgba(255, 255, 255, 0.85);
-=======
     background: rgba(255, 255, 255, 0.95);
->>>>>>> origin/kanan
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
@@ -130,14 +90,9 @@ a:hover { color: var(--primary-dark); }
     z-index: 100;
 }
 
-<<<<<<< HEAD
-.navbar-brand {
-    font-size: 1.15rem;
-=======
 /* Logo */
 .navbar-brand {
     font-size: 1.05rem;
->>>>>>> origin/kanan
     font-weight: 700;
     color: var(--primary);
     text-decoration: none;
@@ -147,11 +102,6 @@ a:hover { color: var(--primary-dark); }
     letter-spacing: -0.02em;
     transition: opacity var(--transition-fast);
 }
-<<<<<<< HEAD
-.navbar-brand:hover { text-decoration: none; opacity: 0.85; color: var(--primary); }
-.brand-icon { font-size: 1.35rem; }
-
-=======
 .navbar-brand:hover { opacity: 0.85; color: var(--primary); text-decoration: none; }
 
 .brand-logo-icon {
@@ -174,19 +124,14 @@ a:hover { color: var(--primary-dark); }
 }
 
 /* Navbar links - sağda */
->>>>>>> origin/kanan
 .navbar-links {
     list-style: none;
     display: flex;
     gap: 0.25rem;
-<<<<<<< HEAD
-}
-=======
     margin-left: auto;
     margin-right: 1rem;
 }
 
->>>>>>> origin/kanan
 .nav-link {
     color: var(--text-secondary);
     font-size: 0.875rem;
@@ -201,9 +146,6 @@ a:hover { color: var(--primary-dark); }
     background: var(--primary-light);
     text-decoration: none;
 }
-<<<<<<< HEAD
-
-=======
 .nav-link.active {
     color: var(--primary);
     font-weight: 600;
@@ -212,25 +154,18 @@ a:hover { color: var(--primary-dark); }
 }
 
 /* Auth area */
->>>>>>> origin/kanan
 .navbar-auth {
     display: flex;
     align-items: center;
     gap: 0.6rem;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/kanan
 .user-greeting {
     font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-secondary);
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/kanan
 .btn-nav-ghost {
     font-size: 0.85rem;
     font-weight: 500;
@@ -245,10 +180,7 @@ a:hover { color: var(--primary-dark); }
     background: var(--primary-light);
     text-decoration: none;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/kanan
 .btn-nav-solid {
     font-size: 0.85rem;
     font-weight: 600;
@@ -263,13 +195,9 @@ a:hover { color: var(--primary-dark); }
     background: var(--primary-dark);
     text-decoration: none;
     box-shadow: var(--shadow-sm);
-<<<<<<< HEAD
-}
-=======
     color: #fff;
 }
 
->>>>>>> origin/kanan
 .btn-nav-outline {
     font-size: 0.85rem;
     font-weight: 500;
@@ -285,8 +213,6 @@ a:hover { color: var(--primary-dark); }
     text-decoration: none;
 }
 
-<<<<<<< HEAD
-=======
 /* Avatar circle */
 .nav-avatar {
     width: 34px;
@@ -303,7 +229,6 @@ a:hover { color: var(--primary-dark); }
     overflow: hidden;
 }
 
->>>>>>> origin/kanan
 /* --- Flash messages --- */
 .flash-container {
     max-width: 900px;
@@ -324,11 +249,7 @@ a:hover { color: var(--primary-dark); }
 }
 @keyframes alertSlideIn {
     from { opacity: 0; transform: translateY(-8px); }
-<<<<<<< HEAD
-    to { opacity: 1; transform: translateY(0); }
-=======
     to   { opacity: 1; transform: translateY(0); }
->>>>>>> origin/kanan
 }
 .alert-icon { font-size: 1rem; }
 .alert-success { background: var(--success-light); color: #065f46; border: 1px solid #a7f3d0; }
@@ -369,13 +290,7 @@ a:hover { color: var(--primary-dark); }
     margin: 0 auto;
     padding: 2.5rem 1.5rem;
 }
-<<<<<<< HEAD
-.form-header {
-    margin-bottom: 2rem;
-}
-=======
 .form-header { margin-bottom: 2rem; }
->>>>>>> origin/kanan
 .form-header h1 {
     font-size: 1.75rem;
     font-weight: 700;
@@ -396,14 +311,8 @@ a:hover { color: var(--primary-dark); }
     margin-bottom: 1.25rem;
     transition: border-color var(--transition-fast);
 }
-<<<<<<< HEAD
-.create-form .form-section:focus-within {
-    border-color: var(--border-hover);
-}
-=======
 .create-form .form-section:focus-within { border-color: var(--border-hover); }
 
->>>>>>> origin/kanan
 .section-title {
     font-size: 0.75rem;
     font-weight: 600;
@@ -412,14 +321,8 @@ a:hover { color: var(--primary-dark); }
     color: var(--text-muted);
     margin-bottom: 1.25rem;
 }
-<<<<<<< HEAD
-.form-group {
-    margin-bottom: 1.1rem;
-}
-=======
 
 .form-group { margin-bottom: 1.1rem; }
->>>>>>> origin/kanan
 .form-group:last-child { margin-bottom: 0; }
 .form-group label {
     display: block;
@@ -429,10 +332,7 @@ a:hover { color: var(--primary-dark); }
     margin-bottom: 0.4rem;
 }
 .required { color: var(--danger); }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/kanan
 .form-group input,
 .form-group textarea,
 .form-group select {
@@ -450,13 +350,7 @@ a:hover { color: var(--primary-dark); }
 }
 .form-group input:hover,
 .form-group textarea:hover,
-<<<<<<< HEAD
-.form-group select:hover {
-    border-color: var(--border-hover);
-}
-=======
 .form-group select:hover { border-color: var(--border-hover); }
->>>>>>> origin/kanan
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
@@ -464,25 +358,15 @@ a:hover { color: var(--primary-dark); }
     box-shadow: var(--shadow-focus);
 }
 .form-group input::placeholder,
-<<<<<<< HEAD
-.form-group textarea::placeholder {
-    color: var(--text-muted);
-}
-.form-group textarea { resize: vertical; min-height: 100px; }
-=======
 .form-group textarea::placeholder { color: var(--text-muted); }
 .form-group textarea { resize: vertical; min-height: 100px; }
 
->>>>>>> origin/kanan
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/kanan
 .checkbox-group { display: flex; align-items: center; gap: 0.5rem; }
 .checkbox-label {
     display: flex;
@@ -501,88 +385,6 @@ a:hover { color: var(--primary-dark); }
     cursor: pointer;
 }
 
-<<<<<<< HEAD
-/* --- File upload area --- */
-.file-upload-area {
-    position: relative;
-    border: 2px dashed var(--border);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    background: var(--bg-page);
-}
-.file-upload-area:hover {
-    border-color: var(--primary);
-    background: var(--primary-light);
-}
-.file-upload-area.drag-over {
-    border-color: var(--primary);
-    background: var(--primary-light);
-}
-.file-upload-area input[type="file"] {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-.file-upload-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.5;
-}
-.file-upload-text {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-.file-upload-text strong {
-    color: var(--primary);
-}
-.file-upload-hint {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 0.3rem;
-}
-.file-preview {
-    margin-top: 0.75rem;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    max-height: 200px;
-    display: none;
-}
-.file-preview img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-}
-.file-preview.has-image {
-    display: block;
-}
-.current-image-preview {
-    margin-top: 0.5rem;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-}
-.current-image-preview img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-}
-.current-image-label {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 0.4rem;
-    margin-bottom: 0.3rem;
-}
-
-=======
->>>>>>> origin/kanan
 /* --- Buttons --- */
 .btn-primary {
     display: inline-flex;
@@ -605,11 +407,7 @@ a:hover { color: var(--primary-dark); }
     text-decoration: none;
     color: #fff;
     transform: translateY(-1px);
-<<<<<<< HEAD
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-=======
     box-shadow: 0 4px 12px rgba(61, 31, 140, 0.3);
->>>>>>> origin/kanan
 }
 .btn-primary:active { transform: translateY(0); }
 
@@ -671,14 +469,7 @@ a:hover { color: var(--primary-dark); }
     padding-top: 0.75rem;
     border-top: 1px solid var(--border);
 }
-<<<<<<< HEAD
-.inline-form {
-    display: inline;
-}
-
-=======
 .inline-form { display: inline; }
->>>>>>> origin/kanan
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -710,16 +501,6 @@ a:hover { color: var(--primary-dark); }
 
 /* --- Footer --- */
 .footer {
-<<<<<<< HEAD
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    border-top: 1px solid var(--border);
-    margin-top: 3rem;
-}
-
-=======
     background: var(--bg-surface);
     border-top: 1px solid var(--border);
     padding: 3rem 2rem 1.5rem;
@@ -817,16 +598,11 @@ a:hover { color: var(--primary-dark); }
 .file-upload-text strong { color: var(--primary); }
 .file-upload-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
 
->>>>>>> origin/kanan
 /* --- Responsive --- */
 @media (max-width: 768px) {
     .navbar { padding: 0 1rem; }
     .navbar-links { display: none; }
     .form-row { grid-template-columns: 1fr; }
     .page-header { flex-direction: column; }
-<<<<<<< HEAD
-}
-=======
     .footer-grid { grid-template-columns: 1fr; }
 }
->>>>>>> origin/kanan

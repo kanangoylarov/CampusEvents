@@ -2,13 +2,10 @@ from app.extensions import db
 from app.models.event_model import Event
 
 
-<<<<<<< HEAD
-=======
 def get_all():
     return Event.query.order_by(Event.date.asc()).all()
 
 
->>>>>>> origin/kanan
 def get_by_id(event_id):
     return db.get_or_404(Event, event_id)
 

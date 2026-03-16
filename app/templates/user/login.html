@@ -6,33 +6,6 @@
 
 {% block content %}
 <div class="auth-wrapper">
-<<<<<<< HEAD
-    <div class="auth-card">
-        <div class="auth-header">
-            <div class="auth-avatar">&#128274;</div>
-            <h2>Welcome Back</h2>
-            <p>Log in to your CampusEvents account</p>
-        </div>
-
-        <form action="{{ url_for('user.login') }}" method="POST" class="auth-form">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="john@campus.edu" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-auth">Log In</button>
-        </form>
-
-        <div class="auth-footer">
-            Don't have an account? <a href="{{ url_for('user.register_form') }}">Sign up</a>
-        </div>
-    </div>
-</div>
-{% endblock %}
-=======
     <div class="auth-page-header">
         <h1 class="auth-page-title">Welcome Back</h1>
         <p class="auth-page-subtitle">Log in to your account to manage events and book rooms.</p>
@@ -47,27 +20,15 @@
                     <input type="email" id="email" name="email" placeholder="student@university.edu" required>
                 </div>
             </div>
-
             <div class="form-group">
-                <div class="label-row">
-                    <label for="password">Password</label>
-                    <a href="#" class="forgot-link">Forgot?</a>
-                </div>
+                <label for="password">Password</label>
                 <div class="input-icon-wrap">
                     <span class="input-icon">&#128274;</span>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
             </div>
-
-            <button type="submit" class="btn-auth">Sign In to Campus &rarr;</button>
+            <button type="submit" class="btn-auth">Sign In &rarr;</button>
         </form>
-
-        <div class="auth-divider"><span>OR CONTINUE WITH</span></div>
-
-        <button class="btn-sso">
-            <span class="sso-icon">&#127979;</span>
-            University SSO
-        </button>
 
         <div class="auth-footer">
             New to the platform? <a href="{{ url_for('user.register_form') }}">Create an account</a>
@@ -75,4 +36,3 @@
     </div>
 </div>
 {% endblock %}
->>>>>>> origin/kanan

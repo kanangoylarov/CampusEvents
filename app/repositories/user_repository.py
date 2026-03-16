@@ -6,17 +6,12 @@ def find_by_email(email):
     return User.query.filter_by(email=email).first()
 
 
-<<<<<<< HEAD
-def save(user):
-    db.session.add(user)
-    db.session.commit()
-=======
 def get_all():
     return User.query.order_by(User.created_at.desc()).all()
 
 
 def get_by_id(user_id):
-    return User.query.get(user_id)
+    return db.session.get(User, user_id)
 
 
 def save(user):
@@ -31,4 +26,3 @@ def update():
 def delete(user):
     db.session.delete(user)
     db.session.commit()
->>>>>>> origin/kanan
