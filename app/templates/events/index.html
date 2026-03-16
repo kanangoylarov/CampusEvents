@@ -28,9 +28,9 @@
     <div class="filter-tabs">
         <button class="filter-tab active" data-filter="all">All Events</button>
         <button class="filter-tab" data-filter="today">&#128197; Today</button>
-        <button class="filter-tab" data-filter="workshop">Workshops</button>
-        <button class="filter-tab" data-filter="social">&#128101; Social</button>
-        <button class="filter-tab" data-filter="academic">&#127891; Academic</button>
+        <button class="filter-tab" data-filter="category:Workshops">Workshops</button>
+        <button class="filter-tab" data-filter="category:Social">&#128101; Social</button>
+        <button class="filter-tab" data-filter="category:Academic">&#127891; Academic</button>
         <button class="filter-tab filter-tab-more">&#9776; More Filters</button>
     </div>
 
@@ -75,10 +75,24 @@
 
     <!-- Events grid -->
     {% if events %}
-    <div class="events-grid">
+    <div class="events-grid" id="eventsList">
         {% for event in events %}
+        {% set title_lower = (event.name or '')|lower %}
+        {% set text_blob = ((event.name or '') ~ ' ' ~ (event.description or ''))|lower %}
+        {% if 'workshop' in text_blob %}
+            {% set derived_category = 'Workshops' %}
+        {% elif 'social' in text_blob %}
+            {% set derived_category = 'Social' %}
+        {% elif 'academic' in text_blob or 'seminar' in text_blob or 'lecture' in text_blob %}
+            {% set derived_category = 'Academic' %}
+        {% else %}
+            {% set derived_category = '' %}
+        {% endif %}
         <div class="event-card"
              data-id="{{ event.id }}"
+             data-title="{{ title_lower | e }}"
+             data-start-date="{{ event.date.strftime('%Y-%m-%d') if event.date else '' }}"
+             data-category="{{ derived_category | e }}"
              data-name="{{ event.name | e }}"
              data-desc="{{ (event.description or 'No description available.') | e }}"
              data-date="{{ event.date.strftime('%b %d, %Y') if event.date else 'TBD' }}"
@@ -313,29 +327,6 @@ document.getElementById('eventModal').addEventListener('click', function(e) {
         closeEventModal();
     }
 });
-
-// Filter tabs
-document.querySelectorAll('.filter-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-        if (this.classList.contains('filter-tab-more')) {
-            var panel = document.getElementById('advancedFilter');
-            panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
-            return;
-        }
-        document.querySelectorAll('.filter-tab').forEach(function(t) {
-            t.classList.remove('active');
-        });
-        this.classList.add('active');
-    });
-});
-
-// Search
-document.getElementById('eventSearch').addEventListener('input', function() {
-    var q = this.value.toLowerCase();
-    document.querySelectorAll('.event-card').forEach(function(card) {
-        var name = card.querySelector('.event-name').textContent.toLowerCase();
-        card.style.display = name.includes(q) ? '' : 'none';
-    });
-});
 </script>
+<script src="{{ url_for('static', filename='events.js') }}"></script>
 {% endblock %}
