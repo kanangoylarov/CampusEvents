@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const cards = Array.from(eventsList.querySelectorAll('.event-card'));
   const filterButtons = Array.from(document.querySelectorAll('.filter-btn, .filter-tab')).filter(
     function (btn) {
-      return !!btn.dataset.filter;
+      return !!btn.dataset.filter || btn.classList.contains('filter-tab-more');
     }
   );
   const searchInput = document.getElementById('eventSearch');
