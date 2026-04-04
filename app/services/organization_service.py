@@ -12,26 +12,32 @@ def get_organization(org_id):
 
 
 def create_organization(form_data, picture_file):
+    name = (form_data.get('name') or '').strip()
+    if not name:
+        return None, 'Organization name is required.'
     saved_filename = save_uploaded_image(picture_file)
     org = Organization(
-        name=form_data.get('name'),
+        name=name,
         description=form_data.get('description'),
         picture=saved_filename,
     )
     organization_repository.save(org)
-    return org
+    return org, None
 
 
 def update_organization(org_id, form_data, picture_file):
     org = organization_repository.get_by_id(org_id)
+    name = (form_data.get('name') or '').strip()
+    if not name:
+        return None, 'Organization name is required.'
     saved_filename = save_uploaded_image(picture_file)
     if saved_filename:
         delete_uploaded_image(org.picture)
         org.picture = saved_filename
-    org.name = form_data.get('name')
+    org.name = name
     org.description = form_data.get('description')
     organization_repository.update()
-    return org
+    return org, None
 
 
 def delete_organization(org_id):

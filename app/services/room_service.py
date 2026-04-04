@@ -14,28 +14,34 @@ def get_room(room_id):
 
 
 def create_room(form_data, picture_file):
+    name = (form_data.get('room_name') or '').strip()
+    if not name:
+        return None, 'Room name is required.'
     saved_filename = save_uploaded_image(picture_file)
     room = Room(
-        room_name=form_data.get('room_name'),
+        room_name=name,
         picture=saved_filename,
         capacity=form_data.get('capacity') or None,
         location=form_data.get('location'),
     )
     room_repository.save(room)
-    return room
+    return room, None
 
 
 def update_room(room_id, form_data, picture_file):
     room = room_repository.get_by_id(room_id)
+    name = (form_data.get('room_name') or '').strip()
+    if not name:
+        return None, 'Room name is required.'
     saved_filename = save_uploaded_image(picture_file)
     if saved_filename:
         delete_uploaded_image(room.picture)
         room.picture = saved_filename
-    room.room_name = form_data.get('room_name')
+    room.room_name = name
     room.location = form_data.get('location')
     room.capacity = form_data.get('capacity') or None
     room_repository.update()
-    return room
+    return room, None
 
 
 def delete_room(room_id):
