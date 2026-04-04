@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Register — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='user.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper register-wrapper">
+    <div class="register-split">
+        <!-- Sol panel - purple -->
+        <div class="register-left">
+            <div class="register-left-content">
+                <h2>Be part of the campus pulse.</h2>
+                <p>Discover workshops, social mixers, and study groups happening right now at your university.</p>
+            </div>
+        </div>
+
+        <!-- Sağ panel - form -->
+        <div class="register-right">
+            <h2 class="register-title">Create Account</h2>
+            <p class="register-subtitle">Join your campus community today</p>
+
+            <form action="{{ url_for('user.register') }}" method="POST" class="auth-form">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">&#128100;</span>
+                        <input type="text" id="full_name" name="full_name" placeholder="Alex Johnson" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">University Email</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">&#9993;</span>
+                        <input type="email" id="email" name="email" placeholder="alex@university.edu" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">&#128274;</span>
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <!-- Account type silinib - task #4 -->
+
+                <button type="submit" class="btn-auth">Register &rarr;</button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="{{ url_for('user.login_form') }}">Sign In</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

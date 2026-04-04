@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% block title %}Edit Organization{% endblock %}
+{% block page_title %}Edit Organization{% endblock %}
+
+{% block content %}
+<div class="admin-form-card">
+    <form method="POST" action="{{ url_for('admin.edit_organization', id=organization.id) }}" enctype="multipart/form-data" class="create-form">
+        <div class="form-section">
+            <p class="section-title">Organization Information</p>
+            <div class="form-group">
+                <label>Name <span class="required">*</span></label>
+                <input type="text" name="name" required value="{{ organization.name }}">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description">{{ organization.description or '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Logo / Banner</label>
+                {% if organization.picture %}
+                <div class="current-image">
+                    <img src="{{ url_for('static', filename='uploads/' + organization.picture) }}" alt="Current image">
+                </div>
+                {% endif %}
+                <div class="file-upload-area">
+                    <input type="file" name="picture" accept="image/*">
+                    <div class="file-upload-icon">&#128247;</div>
+                    <div class="file-upload-text"><strong>Click to upload</strong> new image (optional)</div>
+                    <div class="file-upload-hint">PNG, JPG, GIF, WebP</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a href="{{ url_for('admin.list_organizations') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Login — CampusEvents{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='user.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-page-header">
+        <h1 class="auth-page-title">Welcome Back</h1>
+        <p class="auth-page-subtitle">Log in to your account to manage events and book rooms.</p>
+    </div>
+
+    <div class="auth-card">
+        <form action="{{ url_for('user.login') }}" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="email">University Email</label>
+                <div class="input-icon-wrap">
+                    <span class="input-icon">&#9993;</span>
+                    <input type="email" id="email" name="email" placeholder="student@university.edu" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="password">Password</label>
+                    <a href="#" class="forgot-link">Forgot?</a>
+                </div>
+                <div class="input-icon-wrap">
+                    <span class="input-icon">&#128274;</span>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth">Sign In to Campus &rarr;</button>
+        </form>
+
+        <div class="auth-divider"><span>OR CONTINUE WITH</span></div>
+
+        <button class="btn-sso">
+            <span class="sso-icon">&#127979;</span>
+            University SSO
+        </button>
+
+        <div class="auth-footer">
+            New to the platform? <a href="{{ url_for('user.register_form') }}">Create an account</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

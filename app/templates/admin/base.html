@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %} - CampusEvents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body class="admin-body">
+
+<aside class="admin-sidebar">
+    <div class="sidebar-header">
+        <a href="{{ url_for('admin.dashboard') }}" class="sidebar-brand">
+            <div class="brand-logo-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z"/><path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z"/></svg>
+            </div>
+            <span>Admin Panel</span>
+        </a>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="sidebar-section">
+            <span class="sidebar-section-title">Main</span>
+            <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Dashboard
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <span class="sidebar-section-title">Management</span>
+            <a href="{{ url_for('admin.list_users') }}" class="sidebar-link {% if 'user' in request.endpoint %}active{% endif %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Users
+            </a>
+            <a href="{{ url_for('admin.list_events') }}" class="sidebar-link {% if 'event' in request.endpoint %}active{% endif %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Events
+            </a>
+            <a href="{{ url_for('admin.list_organizations') }}" class="sidebar-link {% if 'organization' in request.endpoint %}active{% endif %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                Organizations
+            </a>
+            <a href="{{ url_for('admin.list_rooms') }}" class="sidebar-link {% if 'room' in request.endpoint %}active{% endif %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Rooms
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <span class="sidebar-section-title">Quick Links</span>
+            <a href="{{ url_for('main.index') }}" class="sidebar-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                View Site
+            </a>
+            <a href="{{ url_for('user.logout') }}" class="sidebar-link sidebar-link-danger">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<div class="admin-main">
+    <header class="admin-topbar">
+        <div class="topbar-left">
+            <h2 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h2>
+        </div>
+        <div class="topbar-right">
+            <span class="topbar-user">{{ current_user.full_name }}</span>
+            <div class="nav-avatar">{{ current_user.full_name[0].upper() }}</div>
+        </div>
+    </header>
+
+    <!-- Flash messages -->
+    <div class="admin-flash">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span class="alert-icon">{% if category == 'success' %}&#10003;{% else %}&#9888;{% endif %}</span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="admin-content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+</body>
+</html>
