@@ -57,8 +57,27 @@ def create_app(config_name='development'):
     for bp in [main_bp, user_bp, event_bp, organization_bp, room_bp, admin_bp]:
         app.register_blueprint(bp)
 
-    # Create all tables if they don't exist
+    # Create all tables and seed admin user if needed
     with app.app_context():
         db.create_all()
+        _seed_admin(app)
 
     return app
+
+
+def _seed_admin(app):
+    from app.models.user_model import User
+    from werkzeug.security import generate_password_hash
+    import os
+
+    if User.query.filter_by(role='admin').first():
+        return
+
+    admin = User(
+        full_name=os.environ.get('ADMIN_NAME', 'Admin'),
+        email=os.environ.get('ADMIN_EMAIL', 'admin@admin.com'),
+        password=generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'admin123')),
+        role='admin',
+    )
+    db.session.add(admin)
+    db.session.commit()
