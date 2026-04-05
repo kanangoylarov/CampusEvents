@@ -73,14 +73,17 @@ def _seed_admin(app):
     from werkzeug.security import generate_password_hash
     import os
 
-    if User.query.filter_by(role='admin').first():
-        return
+    try:
+        if User.query.filter_by(role='admin').first():
+            return
 
-    admin = User(
-        full_name=os.environ.get('ADMIN_NAME', 'Admin'),
-        email=os.environ.get('ADMIN_EMAIL', 'admin@admin.com'),
-        password=generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'admin123')),
-        role='admin',
-    )
-    db.session.add(admin)
-    db.session.commit()
+        admin = User(
+            full_name=os.environ.get('ADMIN_NAME', 'Admin'),
+            email=os.environ.get('ADMIN_EMAIL', 'admin@admin.com'),
+            password=generate_password_hash(os.environ.get('ADMIN_PASSWORD', 'admin123')),
+            role='admin',
+        )
+        db.session.add(admin)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
