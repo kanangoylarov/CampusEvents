@@ -59,10 +59,10 @@ def create_app(config_name='development'):
 
     # Create all tables and seed admin user if needed
     with app.app_context():
-        with db.engine.connect() as conn:
-            from sqlalchemy import text
-            conn.execute(text("SELECT 1"))
-        db.metadata.create_all(db.engine, checkfirst=True)
+        from sqlalchemy import inspect as sa_inspect
+        existing = sa_inspect(db.engine).get_table_names()
+        if not existing:
+            db.create_all()
         _seed_admin(app)
 
     return app
