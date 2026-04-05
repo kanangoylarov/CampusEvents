@@ -16,6 +16,14 @@ class CurrentUser:
     def full_name(self):
         return self.user.full_name if self.user else ""
 
+    @property
+    def role(self):
+        return self.user.role if self.user else None
+
+    @property
+    def id(self):
+        return self.user.id if self.user else None
+
 
 def create_app(config_name='development'):
     app = Flask(__name__, template_folder='templates', static_folder='static')
