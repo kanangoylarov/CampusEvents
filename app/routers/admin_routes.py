@@ -32,8 +32,10 @@ def dashboard():
 
 @admin_bp.get('/users')
 def list_users():
-    users = user_service.list_users()
-    return render_template('admin/users/index.html', users=users)
+    all_users = user_service.list_users()
+    users = [u for u in all_users if u.role != 'organization']
+    org_users = [u for u in all_users if u.role == 'organization']
+    return render_template('admin/users/index.html', users=users, org_users=org_users, total_count=len(all_users))
 
 
 @admin_bp.get('/users/create')
