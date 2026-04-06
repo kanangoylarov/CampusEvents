@@ -62,11 +62,7 @@ def create_organization_form():
     if current_user.role not in ('admin', 'organization'):
         flash('You do not have permission to do this.', 'danger')
         return redirect(url_for('organization.list_organizations'))
-    org_users = []
-    if current_user.role == 'admin':
-        from app.services import user_service
-        org_users = [u for u in user_service.list_users() if u.role == 'organization' and not u.organization_id]
-    return render_template('organizations/create.html', org_users=org_users)
+    return render_template('organizations/create.html')
 
 
 @organization_bp.post('/organizations/create')
@@ -83,18 +79,10 @@ def create_organization():
     if error:
         flash(error, 'danger')
         return redirect(url_for('organization.create_organization_form'))
-    from app.repositories import user_repository
     if current_user.role == 'organization':
+        from app.repositories import user_repository
         current_user.organization_id = org.id
         user_repository.update()
-    elif current_user.role == 'admin':
-        assign_to = request.form.get('assign_user_id')
-        if assign_to:
-            from app.services import user_service
-            user = user_service.get_user(int(assign_to))
-            if user and user.role == 'organization':
-                user.organization_id = org.id
-                user_repository.update()
     flash('Organization registered successfully!', 'success')
     return redirect(url_for('organization.list_organizations'))
 
