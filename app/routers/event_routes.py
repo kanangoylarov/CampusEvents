@@ -5,16 +5,21 @@ from app.services import event_service
 from app.repositories import organization_repository, room_repository, event_repository
 
 
-def _check_org_ownership(event):
-    """Return True if current user is organization and does NOT own this event."""
-    if current_user.role != 'organization':
+def _check_event_permission(event):
+    """Return True if current user does NOT have permission to modify this event."""
+    if current_user.role == 'admin':
         return False
+    if current_user.role == 'user':
+        flash('You do not have permission to do this.', 'danger')
+        return True
+    if current_user.role != 'organization':
+        flash('You do not have permission to do this.', 'danger')
+        return True
     if not event:
         flash('Event not found.', 'danger')
         return True
     user_org = current_user.organization_id
     event_org = event.organization_id
-    # both must exist and match (cast to int to avoid str/int mismatch)
     if user_org and event_org and int(user_org) == int(event_org):
         return False
     flash('You can only modify your own organization\'s events.', 'danger')
@@ -46,7 +51,11 @@ def list_events():
 
 # ── admin + organization (RBAC in __init__.py) ───────────
 @event_bp.get('/events/create')
+@login_required
 def create_event_form():
+    if current_user.role not in ('admin', 'organization'):
+        flash('You do not have permission to do this.', 'danger')
+        return redirect(url_for('event.list_events'))
     organizations = organization_repository.get_all_ordered_by_name()
     rooms = room_repository.get_all_ordered_by_name()
     return render_template('events/create.html',
@@ -54,7 +63,11 @@ def create_event_form():
 
 
 @event_bp.post('/events/create')
+@login_required
 def create_event():
+    if current_user.role not in ('admin', 'organization'):
+        flash('You do not have permission to do this.', 'danger')
+        return redirect(url_for('event.list_events'))
     form_data = request.form.to_dict()
     if current_user.role == 'organization' and current_user.organization_id:
         form_data['organization_id'] = str(current_user.organization_id)
@@ -73,7 +86,7 @@ def create_event():
 @event_bp.get('/events/<int:id>/edit')
 def update_event_form(id):
     event = event_repository.get_by_id(id)
-    if _check_org_ownership(event):
+    if _check_event_permission(event):
         return redirect(url_for('event.list_events'))
     organizations = organization_repository.get_all_ordered_by_name()
     rooms = room_repository.get_all_ordered_by_name()
@@ -84,7 +97,7 @@ def update_event_form(id):
 @event_bp.post('/events/<int:id>/edit')
 def update_event(id):
     event = event_repository.get_by_id(id)
-    if _check_org_ownership(event):
+    if _check_event_permission(event):
         return redirect(url_for('event.list_events'))
     form_data = request.form.to_dict()
     if current_user.role == 'organization' and current_user.organization_id:
@@ -104,7 +117,7 @@ def update_event(id):
 @event_bp.post('/events/<int:id>/delete')
 def delete_event(id):
     event = event_repository.get_by_id(id)
-    if _check_org_ownership(event):
+    if _check_event_permission(event):
         return redirect(url_for('event.list_events'))
     event_service.delete_event(id)
     flash('Event deleted successfully!', 'success')
