@@ -24,6 +24,10 @@ class CurrentUser:
     def id(self):
         return self.user.id if self.user else None
 
+    @property
+    def organization_id(self):
+        return self.user.organization_id if self.user else None
+
 
 def create_app(config_name='development'):
     app = Flask(__name__, template_folder='templates', static_folder='static')
