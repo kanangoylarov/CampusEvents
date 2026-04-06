@@ -187,7 +187,8 @@ def list_organizations():
 
 @admin_bp.get('/organizations/create')
 def create_organization_form():
-    return render_template('admin/organizations/create.html')
+    org_users = [u for u in user_service.list_users() if u.role == 'organization' and not u.organization_id]
+    return render_template('admin/organizations/create.html', org_users=org_users)
 
 
 @admin_bp.post('/organizations/create')
@@ -197,6 +198,12 @@ def create_organization():
     if error:
         flash(error, 'danger')
         return redirect(url_for('admin.create_organization_form'))
+    assign_to = request.form.get('assign_user_id')
+    if assign_to:
+        user = user_service.get_user(int(assign_to))
+        if user and user.role == 'organization':
+            user.organization_id = org.id
+            user_repository.update()
     flash('Organization created successfully!', 'success')
     return redirect(url_for('admin.list_organizations'))
 
@@ -207,7 +214,11 @@ def edit_organization_form(id):
     if not org:
         flash('Organization not found.', 'danger')
         return redirect(url_for('admin.list_organizations'))
-    return render_template('admin/organizations/edit.html', organization=org)
+    all_org_users = [u for u in user_service.list_users() if u.role == 'organization']
+    current_owner = next((u for u in all_org_users if u.organization_id == id), None)
+    available_users = [u for u in all_org_users if not u.organization_id or u.organization_id == id]
+    return render_template('admin/organizations/edit.html', organization=org,
+                           available_users=available_users, current_owner=current_owner)
 
 
 @admin_bp.post('/organizations/<int:id>/edit')
@@ -217,6 +228,16 @@ def edit_organization(id):
     if error:
         flash(error, 'danger')
         return redirect(url_for('admin.edit_organization_form', id=id))
+    assign_to = request.form.get('assign_user_id')
+    all_org_users = [u for u in user_service.list_users() if u.role == 'organization']
+    for u in all_org_users:
+        if u.organization_id == id:
+            u.organization_id = None
+    if assign_to:
+        user = user_service.get_user(int(assign_to))
+        if user and user.role == 'organization':
+            user.organization_id = id
+    user_repository.update()
     flash('Organization updated successfully!', 'success')
     return redirect(url_for('admin.list_organizations'))
 
