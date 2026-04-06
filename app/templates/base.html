@@ -29,8 +29,10 @@
         {% if current_user.is_authenticated %}
         <li><a href="{{ url_for('event.list_events') }}" class="nav-link">Events</a></li>
         <li><a href="{{ url_for('organization.list_organizations') }}" class="nav-link">Organizations</a></li>
-        {% if current_user.role == 'admin' %}
+        {% if current_user.role in ('admin', 'organization') %}
         <li><a href="{{ url_for('room.list_rooms') }}" class="nav-link">Rooms</a></li>
+        {% endif %}
+        {% if current_user.role == 'admin' %}
         <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link nav-link-admin">Admin Panel</a></li>
         {% endif %}
         {% endif %}
