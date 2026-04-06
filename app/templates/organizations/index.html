@@ -22,10 +22,19 @@
         <button class="org-filter-tab">Departments</button>
         <button class="org-filter-tab">Greek Life</button>
         <button class="org-filter-tab">Sports &amp; Rec</button>
-        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        {% if current_user.is_authenticated and (current_user.role == 'admin' or (current_user.role == 'organization' and not my_org)) %}
         <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary btn-sm org-add-btn">+ Add Organization</a>
         {% endif %}
     </div>
+
+    {% if my_org %}
+    <div style="margin-bottom: 2rem; padding: 1.25rem; background: #f0f4ff; border-radius: 12px; border: 1px solid #dbeafe;">
+        <h3 style="margin: 0 0 0.5rem; font-size: 1rem; color: #1d4ed8;">My Organization</h3>
+        <p style="margin: 0 0 0.75rem; font-size: 0.95rem; font-weight: 600;">{{ my_org.name }}</p>
+        <a href="{{ url_for('organization.update_organization_form', id=my_org.id) }}" class="btn-sm btn-secondary">Edit</a>
+        <a href="{{ url_for('organization.view_organization', id=my_org.id) }}" class="btn-sm btn-primary" style="margin-left: 0.5rem;">View</a>
+    </div>
+    {% endif %}
 
     {% if organizations %}
     <div class="org-grid">
@@ -64,14 +73,16 @@
                 </a>
 
                 <!-- Admin: Edit / Delete -->
-                {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                {% if current_user.is_authenticated and (current_user.role == 'admin' or (current_user.role == 'organization' and current_user.organization_id == org.id)) %}
                 <div class="org-admin-actions">
                     <a href="{{ url_for('organization.update_organization_form', id=org.id) }}"
                        class="btn-sm btn-secondary">Edit</a>
+                    {% if current_user.role == 'admin' %}
                     <form action="{{ url_for('organization.delete_organization', id=org.id) }}"
                           method="POST" class="inline-form">
                         <button type="submit" class="btn-sm btn-danger">Delete</button>
                     </form>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>
@@ -95,7 +106,7 @@
         <div class="empty-icon">&#127970;</div>
         <h3>No organizations yet</h3>
         <p>Check back soon for campus organizations.</p>
-        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        {% if current_user.is_authenticated and (current_user.role == 'admin' or (current_user.role == 'organization' and not my_org)) %}
         <a href="{{ url_for('organization.create_organization_form') }}" class="btn-primary">
             + Add Organization
         </a>
