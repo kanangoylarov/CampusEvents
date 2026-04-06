@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="section-header">
-    <h3>All Users ({{ users|length }})</h3>
+    <h3>Users ({{ users|length }}) — Total accounts: {{ total_count }}</h3>
     <a href="{{ url_for('admin.create_user_form') }}" class="btn-primary">+ Add User</a>
 </div>
 
@@ -32,7 +32,7 @@
                 </td>
                 <td>{{ user.email }}</td>
                 <td>
-                    <span class="badge badge-{{ 'purple' if user.role == 'admin' else ('blue' if user.role == 'organization' else 'gray') }}">
+                    <span class="badge badge-{{ 'purple' if user.role == 'admin' else 'gray' }}">
                         {{ user.role }}
                     </span>
                 </td>
@@ -63,4 +63,60 @@
         </tbody>
     </table>
 </div>
+
+{% if org_users %}
+<div class="section-header" style="margin-top: 2.5rem;">
+    <h3>Organization Accounts ({{ org_users|length }})</h3>
+</div>
+
+<div class="admin-table-wrap">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Organization</th>
+                <th>Joined</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in org_users %}
+            <tr>
+                <td>#{{ user.id }}</td>
+                <td>
+                    <div class="table-user">
+                        <div class="table-avatar" style="background: #1d4ed8;">{{ user.full_name[0].upper() }}</div>
+                        {{ user.full_name }}
+                    </div>
+                </td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <span class="badge badge-blue">
+                        {% if user.organization_id %}Linked{% else %}No org yet{% endif %}
+                    </span>
+                </td>
+                <td>{{ user.created_at.strftime('%b %d, %Y') if user.created_at else '-' }}</td>
+                <td>
+                    <div class="table-actions">
+                        <form method="POST" action="{{ url_for('admin.set_user_role', id=user.id) }}" class="inline-form">
+                            <select name="role" onchange="this.form.submit()" class="role-select-inline" title="Change role">
+                                <option value="user">User</option>
+                                <option value="organization" selected>Organizer</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </form>
+                        <a href="{{ url_for('admin.edit_user_form', id=user.id) }}" class="btn-secondary btn-sm">Edit</a>
+                        <form method="POST" action="{{ url_for('admin.delete_user', id=user.id) }}" class="inline-form" onsubmit="return confirm('Delete this user?')">
+                            <button type="submit" class="btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
 {% endblock %}
