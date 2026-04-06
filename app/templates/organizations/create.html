@@ -38,21 +38,6 @@
             </div>
         </div>
 
-        {% if org_users is defined and org_users %}
-        <div class="form-section">
-            <h4 class="section-title">Assign Owner</h4>
-            <div class="form-group">
-                <label for="assign_user_id">Organization User</label>
-                <select id="assign_user_id" name="assign_user_id">
-                    <option value="">— No owner —</option>
-                    {% for u in org_users %}
-                    <option value="{{ u.id }}">{{ u.full_name }} ({{ u.email }})</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        {% endif %}
-
         <div class="form-actions">
             <a href="{{ url_for('organization.list_organizations') }}" class="btn-secondary">Cancel</a>
             <button type="submit" class="btn-primary">Register</button>
